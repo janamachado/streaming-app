@@ -1,0 +1,79 @@
+2025-05-17T00:26:56.084-03:00 [[31merror[39m]: POST /api/items
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:27:04.745-03:00 [[31merror[39m]: POST /api/items
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:28:34.256-03:00 [[31merror[39m]: POST /api/items
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:29:13.444-03:00 [[31merror[39m]: POST /api/items
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:30:24.952-03:00 [[31merror[39m]: POST /api/items
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:31:21.223-03:00 [[31merror[39m]: POST /api/items
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:35:19.449-03:00 [[31merror[39m]: {
+  "method": "POST",
+  "url": "/api/items",
+  "status": 500,
+  "error": "Campos obrigatórios faltando: title, artist, duration, playlistId",
+  "body": {}
+}
+2025-05-17T00:46:34.176-03:00 [[31merror[39m]: PUT /api/songs/1
+Status: 500
+Error: Song not found
+Body: {}
+2025-05-17T00:46:44.981-03:00 [[31merror[39m]: GET /api/songs/1
+Status: 500
+Error: Song not found
+Body: {}
+2025-05-17T00:46:58.962-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:47:00.999-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:55:01.052-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:56:17.348-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T01:00:26.901-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T01:00:53.581-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T01:02:00.445-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T01:03:49.440-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T01:10:31.535-03:00 [[31merror[39m]: GET /api/playlists/1
+Status: 500
+Error: Playlist not found
+Body: {}
+2025-05-17T01:11:27.488-03:00 [[31merror[39m]: DELETE /api/playlists/1
+Status: 500
+Error: Playlist not found
+Body: {}

@@ -1,0 +1,990 @@
+{"level":"info","message":{"method":"POST","response":{"createdAt":"2025-05-17T03:16:44.703Z","id":3,"items":[],"updatedAt":"2025-05-17T03:16:44.703Z"},"status":201,"url":"/"},"timestamp":"2025-05-17T03:16:44.703Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [17/May/2025:03:16:44 +0000] \"POST /api/playlists HTTP/1.1\" 201 97 \"-\" \"-\"","timestamp":"2025-05-17T03:16:44.709Z"}
+{"level":"info","message":{"method":"GET","response":[{"createdAt":"2025-05-17T03:16:03.019Z","id":1,"items":[],"name":"Rock Classics","updatedAt":"2025-05-17T03:16:03.019Z"},{"createdAt":"2025-05-17T03:16:03.019Z","id":2,"items":[],"name":"Jazz Favorites","updatedAt":"2025-05-17T03:16:03.019Z"},{"createdAt":"2025-05-17T03:16:44.703Z","id":3,"items":[],"updatedAt":"2025-05-17T03:16:44.703Z"}],"status":200,"url":"/"},"timestamp":"2025-05-17T03:17:53.674Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [17/May/2025:03:17:53 +0000] \"GET /api/playlists HTTP/1.1\" 200 342 \"-\" \"-\"","timestamp":"2025-05-17T03:17:53.679Z"}
+2025-05-17T00:21:17.890-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:21:27.879-03:00 [[32minfo[39m]: GET / - Status: 200
+2025-05-17T00:21:27.884-03:00 [[32minfo[39m]: GET /
+2025-05-17T00:21:37.584-03:00 [[32minfo[39m]: GET /1 - Status: 200
+2025-05-17T00:21:37.586-03:00 [[32minfo[39m]: GET /1
+2025-05-17T00:21:57.578-03:00 [[32minfo[39m]: POST / - Status: 201
+2025-05-17T00:21:57.585-03:00 [[32minfo[39m]: POST /
+2025-05-17T00:22:58.265-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:23:37.997-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "title": "Stairway to Heaven",
+    "artist": "Led Zeppelin",
+    "duration": 482,
+    "createdAt": "2025-05-17T03:22:58.106Z",
+    "updatedAt": "2025-05-17T03:22:58.106Z",
+    "playlistId": 1
+  },
+  {
+    "id": 2,
+    "title": "Take Five",
+    "artist": "Dave Brubeck",
+    "duration": 324,
+    "createdAt": "2025-05-17T03:22:58.106Z",
+    "updatedAt": "2025-05-17T03:22:58.106Z",
+    "playlistId": 2
+  }
+]
+2025-05-17T00:23:38.009-03:00 [[32minfo[39m]: GET /
+2025-05-17T00:23:51.858-03:00 [[32minfo[39m]: POST /
+Status: 201
+Response: {
+  "id": 3,
+  "createdAt": "2025-05-17T03:23:51.857Z",
+  "updatedAt": "2025-05-17T03:23:51.857Z"
+}
+2025-05-17T00:23:51.863-03:00 [[32minfo[39m]: POST /
+2025-05-17T00:24:05.347-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "title": "Stairway to Heaven",
+    "artist": "Led Zeppelin",
+    "duration": 482,
+    "createdAt": "2025-05-17T03:22:58.106Z",
+    "updatedAt": "2025-05-17T03:22:58.106Z",
+    "playlistId": 1
+  },
+  {
+    "id": 2,
+    "title": "Take Five",
+    "artist": "Dave Brubeck",
+    "duration": 324,
+    "createdAt": "2025-05-17T03:22:58.106Z",
+    "updatedAt": "2025-05-17T03:22:58.106Z",
+    "playlistId": 2
+  },
+  {
+    "id": 3,
+    "createdAt": "2025-05-17T03:23:51.857Z",
+    "updatedAt": "2025-05-17T03:23:51.857Z"
+  }
+]
+2025-05-17T00:24:05.357-03:00 [[32minfo[39m]: GET /
+2025-05-17T00:24:46.841-03:00 [[32minfo[39m]: POST /
+Status: 201
+Response: {
+  "id": 4,
+  "createdAt": "2025-05-17T03:24:46.840Z",
+  "updatedAt": "2025-05-17T03:24:46.840Z"
+}
+2025-05-17T00:24:46.843-03:00 [[32minfo[39m]: POST /
+2025-05-17T00:25:02.767-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "title": "Stairway to Heaven",
+    "artist": "Led Zeppelin",
+    "duration": 482,
+    "createdAt": "2025-05-17T03:22:58.106Z",
+    "updatedAt": "2025-05-17T03:22:58.106Z",
+    "playlistId": 1
+  },
+  {
+    "id": 2,
+    "title": "Take Five",
+    "artist": "Dave Brubeck",
+    "duration": 324,
+    "createdAt": "2025-05-17T03:22:58.106Z",
+    "updatedAt": "2025-05-17T03:22:58.106Z",
+    "playlistId": 2
+  },
+  {
+    "id": 3,
+    "createdAt": "2025-05-17T03:23:51.857Z",
+    "updatedAt": "2025-05-17T03:23:51.857Z"
+  },
+  {
+    "id": 4,
+    "createdAt": "2025-05-17T03:24:46.840Z",
+    "updatedAt": "2025-05-17T03:24:46.840Z"
+  }
+]
+2025-05-17T00:25:02.773-03:00 [[32minfo[39m]: GET /
+2025-05-17T00:26:30.891-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:26:45.241-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:26:56.084-03:00 [[31merror[39m]: POST /api/items
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:26:56.090-03:00 [[32minfo[39m]: POST /api/items
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T00:26:56.106-03:00 [[32minfo[39m]: POST /api/items
+2025-05-17T00:27:04.745-03:00 [[31merror[39m]: POST /api/items
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:27:04.748-03:00 [[32minfo[39m]: POST /api/items
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T00:27:04.750-03:00 [[32minfo[39m]: POST /api/items
+2025-05-17T00:28:25.612-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:28:31.320-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:28:34.256-03:00 [[31merror[39m]: POST /api/items
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:28:34.258-03:00 [[32minfo[39m]: POST /api/items
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T00:28:34.264-03:00 [[32minfo[39m]: POST /api/items
+2025-05-17T00:29:13.444-03:00 [[31merror[39m]: POST /api/items
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:29:13.446-03:00 [[32minfo[39m]: POST /api/items
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T00:29:13.449-03:00 [[32minfo[39m]: POST /api/items
+2025-05-17T00:30:02.175-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:30:24.952-03:00 [[31merror[39m]: POST /api/items
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:30:24.954-03:00 [[32minfo[39m]: POST /api/items
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T00:30:24.960-03:00 [[32minfo[39m]: POST /api/items
+2025-05-17T00:31:17.849-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:31:21.223-03:00 [[31merror[39m]: POST /api/items
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:31:21.225-03:00 [[32minfo[39m]: POST /api/items
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T00:31:21.232-03:00 [[32minfo[39m]: POST /api/items
+2025-05-17T00:33:20.033-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:34:41.399-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:34:58.962-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:35:19.449-03:00 [[31merror[39m]: {
+  "method": "POST",
+  "url": "/api/items",
+  "status": 500,
+  "error": "Campos obrigatórios faltando: title, artist, duration, playlistId",
+  "body": {}
+}
+2025-05-17T00:35:19.450-03:00 [[32minfo[39m]: POST /api/items
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T00:35:19.460-03:00 [[32minfo[39m]: POST /api/items
+2025-05-17T00:35:44.192-03:00 [[32minfo[39m]: POST /
+Status: 201
+Response: {
+  "id": 3,
+  "createdAt": "2025-05-17T03:35:44.192Z",
+  "updatedAt": "2025-05-17T03:35:44.192Z",
+  "items": []
+}
+2025-05-17T00:35:44.201-03:00 [[32minfo[39m]: POST /
+2025-05-17T00:35:48.771-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "name": "Rock Classics",
+    "createdAt": "2025-05-17T03:34:58.843Z",
+    "updatedAt": "2025-05-17T03:34:58.843Z",
+    "items": []
+  },
+  {
+    "id": 2,
+    "name": "Jazz Favorites",
+    "createdAt": "2025-05-17T03:34:58.843Z",
+    "updatedAt": "2025-05-17T03:34:58.843Z",
+    "items": []
+  },
+  {
+    "id": 3,
+    "createdAt": "2025-05-17T03:35:44.192Z",
+    "updatedAt": "2025-05-17T03:35:44.192Z",
+    "items": []
+  }
+]
+2025-05-17T00:35:48.775-03:00 [[32minfo[39m]: GET /
+2025-05-17T00:38:11.276-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:38:40.892-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:46:14.844-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:46:17.160-03:00 [[32minfo[39m]: DELETE /1
+2025-05-17T00:46:25.252-03:00 [[32minfo[39m]: PUT /api/items/1
+2025-05-17T00:46:34.176-03:00 [[31merror[39m]: PUT /api/songs/1
+Status: 500
+Error: Song not found
+Body: {}
+2025-05-17T00:46:34.177-03:00 [[32minfo[39m]: PUT /api/songs/1
+Status: 404
+Response: {
+  "message": "Song not found"
+}
+2025-05-17T00:46:34.181-03:00 [[32minfo[39m]: PUT /api/songs/1
+2025-05-17T00:46:44.981-03:00 [[31merror[39m]: GET /api/songs/1
+Status: 500
+Error: Song not found
+Body: {}
+2025-05-17T00:46:44.983-03:00 [[32minfo[39m]: GET /api/songs/1
+Status: 404
+Response: {
+  "message": "Song not found"
+}
+2025-05-17T00:46:44.984-03:00 [[32minfo[39m]: GET /api/songs/1
+2025-05-17T00:46:52.173-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 2,
+    "title": "Take Five",
+    "artist": "Dave Brubeck",
+    "duration": 324,
+    "createdAt": "2025-05-17T03:46:14.743Z",
+    "updatedAt": "2025-05-17T03:46:14.743Z",
+    "playlistId": 2
+  }
+]
+2025-05-17T00:46:52.174-03:00 [[32minfo[39m]: GET /
+2025-05-17T00:46:58.962-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:46:58.964-03:00 [[32minfo[39m]: POST /api/songs
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T00:46:58.965-03:00 [[32minfo[39m]: POST /api/songs
+2025-05-17T00:47:00.999-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:47:01.000-03:00 [[32minfo[39m]: POST /api/songs
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T00:47:01.003-03:00 [[32minfo[39m]: POST /api/songs
+2025-05-17T00:47:07.688-03:00 [[32minfo[39m]: GET /2
+Status: 200
+Response: {
+  "id": 2,
+  "title": "Take Five",
+  "artist": "Dave Brubeck",
+  "duration": 324,
+  "createdAt": "2025-05-17T03:46:14.743Z",
+  "updatedAt": "2025-05-17T03:46:14.743Z",
+  "playlistId": 2
+}
+2025-05-17T00:47:07.690-03:00 [[32minfo[39m]: GET /2
+2025-05-17T00:47:12.065-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 2,
+    "title": "Take Five",
+    "artist": "Dave Brubeck",
+    "duration": 324,
+    "createdAt": "2025-05-17T03:46:14.743Z",
+    "updatedAt": "2025-05-17T03:46:14.743Z",
+    "playlistId": 2
+  }
+]
+2025-05-17T00:47:12.066-03:00 [[32minfo[39m]: GET /
+2025-05-17T00:47:22.462-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:48:14.008-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:50:25.977-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:50:31.455-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:53:34.311-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:55:01.052-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:55:01.055-03:00 [[32minfo[39m]: POST /api/songs
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T00:55:01.060-03:00 [[32minfo[39m]: POST /api/songs
+2025-05-17T00:56:15.085-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:56:17.348-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T00:56:17.350-03:00 [[32minfo[39m]: POST /api/songs
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T00:56:17.354-03:00 [[32minfo[39m]: POST /api/songs
+2025-05-17T00:57:09.064-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T00:59:01.909-03:00 [[32minfo[39m]: POST /
+Status: 201
+Response: {
+  "id": 3,
+  "artist": "Queen",
+  "title": "Bohemian Rhapsody",
+  "playlistId": 1,
+  "duration": 354,
+  "createdAt": "2025-05-17T03:59:01.909Z",
+  "updatedAt": "2025-05-17T03:59:01.909Z"
+}
+2025-05-17T00:59:01.912-03:00 [[32minfo[39m]: POST /
+Body: {
+  "artist": "Queen",
+  "title": "Bohemian Rhapsody",
+  "playlistId": 1,
+  "duration": 354
+}
+2025-05-17T00:59:50.228-03:00 [[32minfo[39m]: POST /
+Status: 201
+Response: {
+  "id": 4,
+  "artist": "Queen",
+  "title": "Bohemian Rhapsody",
+  "playlistId": 1,
+  "duration": 354,
+  "createdAt": "2025-05-17T03:59:50.228Z",
+  "updatedAt": "2025-05-17T03:59:50.228Z"
+}
+2025-05-17T00:59:50.231-03:00 [[32minfo[39m]: POST /
+Body: {
+  "artist": "Queen",
+  "title": "Bohemian Rhapsody",
+  "playlistId": 1,
+  "duration": 354
+}
+2025-05-17T01:00:15.591-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "title": "Stairway to Heaven",
+    "artist": "Led Zeppelin",
+    "duration": 482,
+    "createdAt": "2025-05-17T03:57:08.988Z",
+    "updatedAt": "2025-05-17T03:57:08.988Z",
+    "playlistId": 1
+  },
+  {
+    "id": 2,
+    "title": "Take Five",
+    "artist": "Dave Brubeck",
+    "duration": 324,
+    "createdAt": "2025-05-17T03:57:08.988Z",
+    "updatedAt": "2025-05-17T03:57:08.988Z",
+    "playlistId": 2
+  },
+  {
+    "id": 3,
+    "artist": "Queen",
+    "title": "Bohemian Rhapsody",
+    "playlistId": 1,
+    "duration": 354,
+    "createdAt": "2025-05-17T03:59:01.909Z",
+    "updatedAt": "2025-05-17T03:59:01.909Z"
+  },
+  {
+    "id": 4,
+    "artist": "Queen",
+    "title": "Bohemian Rhapsody",
+    "playlistId": 1,
+    "duration": 354,
+    "createdAt": "2025-05-17T03:59:50.228Z",
+    "updatedAt": "2025-05-17T03:59:50.228Z"
+  }
+]
+2025-05-17T01:00:15.593-03:00 [[32minfo[39m]: GET /
+2025-05-17T01:00:26.901-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T01:00:26.903-03:00 [[32minfo[39m]: POST /api/songs
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T01:00:26.904-03:00 [[32minfo[39m]: POST /api/songs
+2025-05-17T01:00:53.581-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T01:00:53.582-03:00 [[32minfo[39m]: POST /api/songs
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T01:00:53.583-03:00 [[32minfo[39m]: POST /api/songs
+2025-05-17T01:01:25.569-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T01:01:47.570-03:00 [[32minfo[39m]: POST /
+Status: 201
+Response: {
+  "id": 3,
+  "artist": "Queen",
+  "title": "Bohemian Rhapsody",
+  "playlistId": 1,
+  "duration": 354,
+  "createdAt": "2025-05-17T04:01:47.570Z",
+  "updatedAt": "2025-05-17T04:01:47.570Z"
+}
+2025-05-17T01:01:47.574-03:00 [[32minfo[39m]: POST /
+Body: {
+  "artist": "Queen",
+  "title": "Bohemian Rhapsody",
+  "playlistId": 1,
+  "duration": 354
+}
+2025-05-17T01:02:00.445-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T01:02:00.447-03:00 [[32minfo[39m]: POST /api/songs
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T01:02:00.450-03:00 [[32minfo[39m]: POST /api/songs
+2025-05-17T01:03:49.440-03:00 [[31merror[39m]: POST /api/songs
+Status: 500
+Error: Campos obrigatórios faltando: title, artist, duration, playlistId
+Body: {}
+2025-05-17T01:03:49.442-03:00 [[32minfo[39m]: POST /api/songs
+Status: 400
+Response: {
+  "message": "Campos obrigatórios faltando: title, artist, duration, playlistId"
+}
+2025-05-17T01:03:49.443-03:00 [[32minfo[39m]: POST /api/songs
+2025-05-17T01:04:00.802-03:00 [[32minfo[39m]: POST /
+Status: 201
+Response: {
+  "id": 4,
+  "title": "Febre",
+  "artist": "Liniker",
+  "duration": 456,
+  "createdAt": "2025-05-17T04:04:00.802Z",
+  "updatedAt": "2025-05-17T04:04:00.802Z",
+  "playlistId": 3
+}
+2025-05-17T01:04:00.803-03:00 [[32minfo[39m]: POST /
+Body: {
+  "title": "Febre",
+  "artist": "Liniker",
+  "duration": 456,
+  "createdAt": "2025-05-17T03:22:58.106Z",
+  "updatedAt": "2025-05-17T03:22:58.106Z",
+  "playlistId": 3
+}
+2025-05-17T01:04:14.678-03:00 [[32minfo[39m]: POST /
+Status: 201
+Response: {
+  "id": 3,
+  "name": "Pagodin",
+  "description": "Sambar",
+  "createdAt": "2025-05-17T04:04:14.678Z",
+  "updatedAt": "2025-05-17T04:04:14.678Z",
+  "items": []
+}
+2025-05-17T01:04:14.679-03:00 [[32minfo[39m]: POST /
+Body: {
+  "name": "Pagodin",
+  "description": "Sambar"
+}
+2025-05-17T01:04:22.558-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "name": "Rock Classics",
+    "createdAt": "2025-05-17T04:01:25.510Z",
+    "updatedAt": "2025-05-17T04:01:25.510Z",
+    "items": []
+  },
+  {
+    "id": 2,
+    "name": "Jazz Favorites",
+    "createdAt": "2025-05-17T04:01:25.510Z",
+    "updatedAt": "2025-05-17T04:01:25.510Z",
+    "items": []
+  },
+  {
+    "id": 3,
+    "name": "Pagodin",
+    "description": "Sambar",
+    "createdAt": "2025-05-17T04:04:14.678Z",
+    "updatedAt": "2025-05-17T04:04:14.678Z",
+    "items": []
+  }
+]
+2025-05-17T01:04:22.559-03:00 [[32minfo[39m]: GET /
+2025-05-17T01:04:28.692-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "title": "Stairway to Heaven",
+    "artist": "Led Zeppelin",
+    "duration": 482,
+    "createdAt": "2025-05-17T04:01:25.509Z",
+    "updatedAt": "2025-05-17T04:01:25.509Z",
+    "playlistId": 1
+  },
+  {
+    "id": 2,
+    "title": "Take Five",
+    "artist": "Dave Brubeck",
+    "duration": 324,
+    "createdAt": "2025-05-17T04:01:25.509Z",
+    "updatedAt": "2025-05-17T04:01:25.509Z",
+    "playlistId": 2
+  },
+  {
+    "id": 3,
+    "artist": "Queen",
+    "title": "Bohemian Rhapsody",
+    "playlistId": 1,
+    "duration": 354,
+    "createdAt": "2025-05-17T04:01:47.570Z",
+    "updatedAt": "2025-05-17T04:01:47.570Z"
+  },
+  {
+    "id": 4,
+    "title": "Febre",
+    "artist": "Liniker",
+    "duration": 456,
+    "createdAt": "2025-05-17T04:04:00.802Z",
+    "updatedAt": "2025-05-17T04:04:00.802Z",
+    "playlistId": 3
+  }
+]
+2025-05-17T01:04:28.693-03:00 [[32minfo[39m]: GET /
+2025-05-17T01:08:42.913-03:00 [[32minfo[39m]: Server is running on port 3000
+2025-05-17T01:08:46.898-03:00 [[32minfo[39m]: PUT /1
+Status: 200
+Response: {
+  "id": 1,
+  "title": "Música Atualizada",
+  "artist": "Artista Atualizado",
+  "duration": 482,
+  "createdAt": "2025-05-17T04:08:42.856Z",
+  "updatedAt": "2025-05-17T04:08:46.898Z",
+  "playlistId": 1,
+  "url": "https://nova-url-musica.com"
+}
+2025-05-17T01:08:46.901-03:00 [[32minfo[39m]: PUT /1
+Body: {
+  "title": "Música Atualizada",
+  "artist": "Artista Atualizado",
+  "url": "https://nova-url-musica.com",
+  "playlistId": 1
+}
+2025-05-17T01:08:51.679-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "title": "Música Atualizada",
+    "artist": "Artista Atualizado",
+    "duration": 482,
+    "createdAt": "2025-05-17T04:08:42.856Z",
+    "updatedAt": "2025-05-17T04:08:46.898Z",
+    "playlistId": 1,
+    "url": "https://nova-url-musica.com"
+  },
+  {
+    "id": 2,
+    "title": "Take Five",
+    "artist": "Dave Brubeck",
+    "duration": 324,
+    "createdAt": "2025-05-17T04:08:42.856Z",
+    "updatedAt": "2025-05-17T04:08:42.856Z",
+    "playlistId": 2
+  }
+]
+2025-05-17T01:08:51.681-03:00 [[32minfo[39m]: GET /
+2025-05-17T01:08:58.182-03:00 [[32minfo[39m]: GET /1
+Status: 200
+Response: {
+  "id": 1,
+  "title": "Música Atualizada",
+  "artist": "Artista Atualizado",
+  "duration": 482,
+  "createdAt": "2025-05-17T04:08:42.856Z",
+  "updatedAt": "2025-05-17T04:08:46.898Z",
+  "playlistId": 1,
+  "url": "https://nova-url-musica.com"
+}
+2025-05-17T01:08:58.183-03:00 [[32minfo[39m]: GET /1
+2025-05-17T01:09:06.437-03:00 [[32minfo[39m]: POST /
+Status: 201
+Response: {
+  "id": 3,
+  "title": "Febre",
+  "artist": "Liniker",
+  "duration": 456,
+  "createdAt": "2025-05-17T04:09:06.437Z",
+  "updatedAt": "2025-05-17T04:09:06.437Z",
+  "playlistId": 3
+}
+2025-05-17T01:09:06.438-03:00 [[32minfo[39m]: POST /
+Body: {
+  "title": "Febre",
+  "artist": "Liniker",
+  "duration": 456,
+  "createdAt": "2025-05-17T03:22:58.106Z",
+  "updatedAt": "2025-05-17T03:22:58.106Z",
+  "playlistId": 3
+}
+2025-05-17T01:09:08.965-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "title": "Música Atualizada",
+    "artist": "Artista Atualizado",
+    "duration": 482,
+    "createdAt": "2025-05-17T04:08:42.856Z",
+    "updatedAt": "2025-05-17T04:08:46.898Z",
+    "playlistId": 1,
+    "url": "https://nova-url-musica.com"
+  },
+  {
+    "id": 2,
+    "title": "Take Five",
+    "artist": "Dave Brubeck",
+    "duration": 324,
+    "createdAt": "2025-05-17T04:08:42.856Z",
+    "updatedAt": "2025-05-17T04:08:42.856Z",
+    "playlistId": 2
+  },
+  {
+    "id": 3,
+    "title": "Febre",
+    "artist": "Liniker",
+    "duration": 456,
+    "createdAt": "2025-05-17T04:09:06.437Z",
+    "updatedAt": "2025-05-17T04:09:06.437Z",
+    "playlistId": 3
+  }
+]
+2025-05-17T01:09:08.967-03:00 [[32minfo[39m]: GET /
+2025-05-17T01:09:13.793-03:00 [[32minfo[39m]: GET /3
+Status: 200
+Response: {
+  "id": 3,
+  "title": "Febre",
+  "artist": "Liniker",
+  "duration": 456,
+  "createdAt": "2025-05-17T04:09:06.437Z",
+  "updatedAt": "2025-05-17T04:09:06.437Z",
+  "playlistId": 3
+}
+2025-05-17T01:09:13.795-03:00 [[32minfo[39m]: GET /3
+2025-05-17T01:09:20.102-03:00 [[32minfo[39m]: DELETE /1
+2025-05-17T01:09:22.952-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 2,
+    "title": "Take Five",
+    "artist": "Dave Brubeck",
+    "duration": 324,
+    "createdAt": "2025-05-17T04:08:42.856Z",
+    "updatedAt": "2025-05-17T04:08:42.856Z",
+    "playlistId": 2
+  },
+  {
+    "id": 3,
+    "title": "Febre",
+    "artist": "Liniker",
+    "duration": 456,
+    "createdAt": "2025-05-17T04:09:06.437Z",
+    "updatedAt": "2025-05-17T04:09:06.437Z",
+    "playlistId": 3
+  }
+]
+2025-05-17T01:09:22.954-03:00 [[32minfo[39m]: GET /
+2025-05-17T01:09:33.939-03:00 [[32minfo[39m]: GET /1
+Status: 200
+Response: {
+  "id": 1,
+  "name": "Rock Classics",
+  "createdAt": "2025-05-17T04:08:42.857Z",
+  "updatedAt": "2025-05-17T04:08:42.857Z",
+  "items": []
+}
+2025-05-17T01:09:33.940-03:00 [[32minfo[39m]: GET /1
+2025-05-17T01:09:36.486-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "name": "Rock Classics",
+    "createdAt": "2025-05-17T04:08:42.857Z",
+    "updatedAt": "2025-05-17T04:08:42.857Z",
+    "items": []
+  },
+  {
+    "id": 2,
+    "name": "Jazz Favorites",
+    "createdAt": "2025-05-17T04:08:42.857Z",
+    "updatedAt": "2025-05-17T04:08:42.857Z",
+    "items": []
+  }
+]
+2025-05-17T01:09:36.487-03:00 [[32minfo[39m]: GET /
+2025-05-17T01:09:39.356-03:00 [[32minfo[39m]: POST /
+Status: 201
+Response: {
+  "id": 3,
+  "name": "Pagodin",
+  "description": "Sambar",
+  "createdAt": "2025-05-17T04:09:39.356Z",
+  "updatedAt": "2025-05-17T04:09:39.356Z",
+  "items": []
+}
+2025-05-17T01:09:39.357-03:00 [[32minfo[39m]: POST /
+Body: {
+  "name": "Pagodin",
+  "description": "Sambar"
+}
+2025-05-17T01:09:43.810-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "name": "Rock Classics",
+    "createdAt": "2025-05-17T04:08:42.857Z",
+    "updatedAt": "2025-05-17T04:08:42.857Z",
+    "items": []
+  },
+  {
+    "id": 2,
+    "name": "Jazz Favorites",
+    "createdAt": "2025-05-17T04:08:42.857Z",
+    "updatedAt": "2025-05-17T04:08:42.857Z",
+    "items": []
+  },
+  {
+    "id": 3,
+    "name": "Pagodin",
+    "description": "Sambar",
+    "createdAt": "2025-05-17T04:09:39.356Z",
+    "updatedAt": "2025-05-17T04:09:39.356Z",
+    "items": []
+  }
+]
+2025-05-17T01:09:43.812-03:00 [[32minfo[39m]: GET /
+2025-05-17T01:09:49.717-03:00 [[32minfo[39m]: PUT /1
+Status: 200
+Response: {
+  "id": 1,
+  "name": "Rock Classics",
+  "createdAt": "2025-05-17T04:08:42.857Z",
+  "updatedAt": "2025-05-17T04:09:49.717Z",
+  "items": []
+}
+2025-05-17T01:09:49.719-03:00 [[32minfo[39m]: PUT /1
+2025-05-17T01:09:52.720-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "name": "Rock Classics",
+    "createdAt": "2025-05-17T04:08:42.857Z",
+    "updatedAt": "2025-05-17T04:09:49.717Z",
+    "items": []
+  },
+  {
+    "id": 2,
+    "name": "Jazz Favorites",
+    "createdAt": "2025-05-17T04:08:42.857Z",
+    "updatedAt": "2025-05-17T04:08:42.857Z",
+    "items": []
+  },
+  {
+    "id": 3,
+    "name": "Pagodin",
+    "description": "Sambar",
+    "createdAt": "2025-05-17T04:09:39.356Z",
+    "updatedAt": "2025-05-17T04:09:39.356Z",
+    "items": []
+  }
+]
+2025-05-17T01:09:52.721-03:00 [[32minfo[39m]: GET /
+2025-05-17T01:10:05.403-03:00 [[32minfo[39m]: PUT /1
+Status: 200
+Response: {
+  "id": 1,
+  "name": "Playlist Atualizada",
+  "createdAt": "2025-05-17T04:08:42.857Z",
+  "updatedAt": "2025-05-17T04:10:05.403Z",
+  "items": [],
+  "description": "Nova descrição"
+}
+2025-05-17T01:10:05.404-03:00 [[32minfo[39m]: PUT /1
+Body: {
+  "name": "Playlist Atualizada",
+  "description": "Nova descrição"
+}
+2025-05-17T01:10:10.169-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 1,
+    "name": "Playlist Atualizada",
+    "createdAt": "2025-05-17T04:08:42.857Z",
+    "updatedAt": "2025-05-17T04:10:05.403Z",
+    "items": [],
+    "description": "Nova descrição"
+  },
+  {
+    "id": 2,
+    "name": "Jazz Favorites",
+    "createdAt": "2025-05-17T04:08:42.857Z",
+    "updatedAt": "2025-05-17T04:08:42.857Z",
+    "items": []
+  },
+  {
+    "id": 3,
+    "name": "Pagodin",
+    "description": "Sambar",
+    "createdAt": "2025-05-17T04:09:39.356Z",
+    "updatedAt": "2025-05-17T04:09:39.356Z",
+    "items": []
+  }
+]
+2025-05-17T01:10:10.170-03:00 [[32minfo[39m]: GET /
+2025-05-17T01:10:17.656-03:00 [[32minfo[39m]: GET /1
+Status: 200
+Response: {
+  "id": 1,
+  "name": "Playlist Atualizada",
+  "createdAt": "2025-05-17T04:08:42.857Z",
+  "updatedAt": "2025-05-17T04:10:05.403Z",
+  "items": [],
+  "description": "Nova descrição"
+}
+2025-05-17T01:10:17.657-03:00 [[32minfo[39m]: GET /1
+2025-05-17T01:10:20.067-03:00 [[32minfo[39m]: GET /3
+Status: 200
+Response: {
+  "id": 3,
+  "name": "Pagodin",
+  "description": "Sambar",
+  "createdAt": "2025-05-17T04:09:39.356Z",
+  "updatedAt": "2025-05-17T04:09:39.356Z",
+  "items": []
+}
+2025-05-17T01:10:20.069-03:00 [[32minfo[39m]: GET /3
+2025-05-17T01:10:23.672-03:00 [[32minfo[39m]: DELETE /1
+2025-05-17T01:10:26.472-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 2,
+    "name": "Jazz Favorites",
+    "createdAt": "2025-05-17T04:08:42.857Z",
+    "updatedAt": "2025-05-17T04:08:42.857Z",
+    "items": []
+  },
+  {
+    "id": 3,
+    "name": "Pagodin",
+    "description": "Sambar",
+    "createdAt": "2025-05-17T04:09:39.356Z",
+    "updatedAt": "2025-05-17T04:09:39.356Z",
+    "items": []
+  }
+]
+2025-05-17T01:10:26.473-03:00 [[32minfo[39m]: GET /
+2025-05-17T01:10:29.005-03:00 [[32minfo[39m]: GET /3
+Status: 200
+Response: {
+  "id": 3,
+  "name": "Pagodin",
+  "description": "Sambar",
+  "createdAt": "2025-05-17T04:09:39.356Z",
+  "updatedAt": "2025-05-17T04:09:39.356Z",
+  "items": []
+}
+2025-05-17T01:10:29.005-03:00 [[32minfo[39m]: GET /3
+2025-05-17T01:10:31.535-03:00 [[31merror[39m]: GET /api/playlists/1
+Status: 500
+Error: Playlist not found
+Body: {}
+2025-05-17T01:10:31.537-03:00 [[32minfo[39m]: GET /api/playlists/1
+Status: 404
+Response: {
+  "message": "Playlist not found"
+}
+2025-05-17T01:10:31.538-03:00 [[32minfo[39m]: GET /api/playlists/1
+2025-05-17T01:11:27.488-03:00 [[31merror[39m]: DELETE /api/playlists/1
+Status: 500
+Error: Playlist not found
+Body: {}
+2025-05-17T01:11:27.490-03:00 [[32minfo[39m]: DELETE /api/playlists/1
+Status: 404
+Response: {
+  "message": "Playlist not found"
+}
+2025-05-17T01:11:27.493-03:00 [[32minfo[39m]: DELETE /api/playlists/1
+2025-05-17T01:11:39.610-03:00 [[32minfo[39m]: POST /
+Status: 201
+Response: {
+  "id": 3,
+  "description": "Sambar",
+  "createdAt": "2025-05-17T04:11:39.610Z",
+  "updatedAt": "2025-05-17T04:11:39.610Z",
+  "items": []
+}
+2025-05-17T01:11:39.611-03:00 [[32minfo[39m]: POST /
+Body: {
+  "description": "Sambar"
+}
+2025-05-17T01:11:44.906-03:00 [[32minfo[39m]: GET /
+Status: 200
+Response: [
+  {
+    "id": 2,
+    "name": "Jazz Favorites",
+    "createdAt": "2025-05-17T04:08:42.857Z",
+    "updatedAt": "2025-05-17T04:08:42.857Z",
+    "items": []
+  },
+  {
+    "id": 3,
+    "name": "Pagodin",
+    "description": "Sambar",
+    "createdAt": "2025-05-17T04:09:39.356Z",
+    "updatedAt": "2025-05-17T04:09:39.356Z",
+    "items": []
+  },
+  {
+    "id": 3,
+    "description": "Sambar",
+    "createdAt": "2025-05-17T04:11:39.610Z",
+    "updatedAt": "2025-05-17T04:11:39.610Z",
+    "items": []
+  }
+]
+2025-05-17T01:11:44.907-03:00 [[32minfo[39m]: GET /
