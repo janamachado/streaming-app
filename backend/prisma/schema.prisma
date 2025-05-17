@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Playlist {
+  id            Int            @id @default(autoincrement())
+  name          String
+  description   String?        // opcional, descrição da playlist
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  playlistSongs PlaylistSong[] // relação muitos-para-muitos via tabela intermediária
+}
+
+model Song {
+  id            Int            @id @default(autoincrement())
+  title         String
+  artist        String?
+  album         String?
+  duration      Int?           // duração em segundos
+  url           String?        // URL do arquivo ou streaming
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  playlistSongs PlaylistSong[] // relação muitos-para-muitos via tabela intermediária
+}
+
+model PlaylistSong {
+  id          Int      @id @default(autoincrement())
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
+  playlistId Int
+  song       Song     @relation(fields: [songId], references: [id])
+  songId     Int
+
+  order       Int?     // opcional: posição da música na playlist
+
+  @@unique([playlistId, songId]) // evita músicas duplicadas na mesma playlist
+}
