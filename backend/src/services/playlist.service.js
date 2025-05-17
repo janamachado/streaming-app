@@ -1,40 +1,24 @@
-// Mock data store
-let playlists = [
-  {
-    id: 1,
-    name: 'Rock Classics',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    items: []
-  },
-  {
-    id: 2,
-    name: 'Jazz Favorites',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    items: []
-  }
-];
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 class PlaylistService {
   async create(data) {
-    const newPlaylist = {
-      id: playlists.length + 1,
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      items: []
-    };
-    playlists.push(newPlaylist);
+    const newPlaylist = await prisma.playlist.create({
+      data: {
+        name: data.name,
+        description: data.description,
+        playlistSongs: data.playlistSongs
+      }
+    });
     return newPlaylist;
   }
 
   async findAll() {
-    return playlists;
+    return await prisma.playlist.findMany();
   }
 
   async findOne(id) {
-    const playlist = playlists.find(p => p.id === id);
+    const playlist = await prisma.playlist.findUnique({ where: { id } });
     if (!playlist) {
       throw { type: 'NotFoundError', message: 'Playlist not found' };
     }
@@ -42,24 +26,28 @@ class PlaylistService {
   }
 
   async update(id, data) {
-    const index = playlists.findIndex(p => p.id === id);
-    if (index === -1) {
+    const playlist = await prisma.playlist.findUnique({ where: { id } });
+    if (!playlist) {
       throw { type: 'NotFoundError', message: 'Playlist not found' };
     }
-    playlists[index] = {
-      ...playlists[index],
-      ...data,
-      updatedAt: new Date()
-    };
-    return playlists[index];
+    const updatedPlaylist = await prisma.playlist.update({
+      where: { id },
+      data: {
+        name: data.name,
+        description: data.description,
+        updatedAt: new Date(),
+        playlistSongs: data.playlistSongs
+      }
+    });
+    return updatedPlaylist;
   }
 
   async delete(id) {
-    const index = playlists.findIndex(p => p.id === id);
-    if (index === -1) {
+    const playlist = await prisma.playlist.findUnique({ where: { id } });
+    if (!playlist) {
       throw { type: 'NotFoundError', message: 'Playlist not found' };
     }
-    playlists.splice(index, 1);
+    await prisma.playlist.delete({ where: { id } });
   }
 }
 

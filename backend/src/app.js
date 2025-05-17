@@ -19,7 +19,7 @@ app.use(httpLogger);
 app.use(successLogger);
 
 // Routes
-app.use('/api/songs', songRoutes);
+app.use('/api/song', songRoutes);
 app.use('/api/playlists', playlistRoutes);
 
 // Error handling
