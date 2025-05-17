@@ -12,7 +12,41 @@ class PlaylistController {
 
   async findAll(req, res, next) {
     try {
-      const playlists = await playlistService.findAll();
+      const filters = {
+        name: req.query.name,
+        songId: req.query.songId
+      };
+      const playlists = await playlistService.findAll(filters);
+      res.json(playlists);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async search(req, res, next) {
+    try {
+      const { query } = req.query;
+      
+      if (!query) {
+        throw { type: 'ValidationError', message: 'Search query is required' };
+      }
+
+      const playlists = await playlistService.search(query);
+      res.json(playlists);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async findPlaylistsBySong(req, res, next) {
+    try {
+      const { song } = req.query;
+      
+      if (!song) {
+        throw { type: 'ValidationError', message: 'Song query (ID or title) is required' };
+      }
+
+      const playlists = await playlistService.findPlaylistsBySong(song);
       res.json(playlists);
     } catch (error) {
       next(error);
@@ -41,6 +75,38 @@ class PlaylistController {
     try {
       await playlistService.delete(parseInt(req.params.id));
       res.status(204).send();
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async addSongs(req, res, next) {
+    try {
+      const playlistId = parseInt(req.params.id);
+      const { songIds } = req.body;
+      
+      if (!Array.isArray(songIds) || songIds.length === 0) {
+        throw { type: 'ValidationError', message: 'songIds must be a non-empty array' };
+      }
+
+      const playlist = await playlistService.addSongs(playlistId, songIds);
+      res.json(playlist);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async removeSongs(req, res, next) {
+    try {
+      const playlistId = parseInt(req.params.id);
+      const { songIds } = req.body;
+      
+      if (!Array.isArray(songIds) || songIds.length === 0) {
+        throw { type: 'ValidationError', message: 'songIds must be a non-empty array' };
+      }
+
+      const playlist = await playlistService.removeSongs(playlistId, songIds);
+      res.json(playlist);
     } catch (error) {
       next(error);
     }
