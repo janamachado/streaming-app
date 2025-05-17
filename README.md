@@ -68,6 +68,19 @@ Para abrir o visualizador do banco:
 npx prisma studio
 ```
 
+### 🧬 Gerando os primeiros dados essenciais: seed
+
+Após instalar as dependências e configurar o arquivo `.env`, é necessário gerar o Prisma Client com o comando:
+
+```bash
+npx prisma generate
+```
+
+Executar o script de seed:
+
+```bash
+npx prisma db seed
+```
 ---
 
 ## 📁 Estrutura inicial do banco de dados
