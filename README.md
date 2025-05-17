@@ -110,27 +110,64 @@ O banco atualmente possui dois modelos:
 
 ---
 
-## 🔗 Rotas disponíveis
+## 📚 Documentação da API
+
+A API possui documentação interativa usando Swagger/OpenAPI. Para acessá-la:
+
+1. Inicie o servidor:
+   ```bash
+   cd backend
+   npm run dev
+   ```
+
+2. Acesse a documentação em:
+   ```
+   http://localhost:3000/api-docs
+   ```
+
+### 🔍 Recursos da Documentação
+
+- Interface interativa para testar todos os endpoints
+- Descrição detalhada de cada rota
+- Exemplos de requisição e resposta
+- Schemas dos modelos de dados
+- Códigos de status e mensagens de erro
 
 ### 🎵 Songs
 
-| Método | Rota        | Descrição                    |
-|--------|-------------|------------------------------|
-| GET    | `/songs`    | Lista todas as músicas       |
-| GET    | `/songs/:id`| Retorna uma música específica|
-| POST   | `/songs`    | Cria uma nova música         |
-| PUT    | `/songs/:id`| Atualiza uma música          |
-| DELETE | `/songs/:id`| Remove uma música            |
+| Método | Rota           | Descrição                     |
+|--------|----------------|-------------------------------|
+| GET    | `/api/song`    | Lista todas as músicas        |
+| GET    | `/api/song/:id`| Retorna uma música específica |
+| POST   | `/api/song`    | Cria uma nova música          |
+| PUT    | `/api/song/:id`| Atualiza uma música           |
+| DELETE | `/api/song/:id`| Remove uma música             |
 
 ### 📚 Playlists
 
-| Método | Rota           | Descrição                       |
-|--------|----------------|----------------------------------|
-| GET    | `/playlists`   | Lista todas as playlists        |
-| GET    | `/playlists/:id`| Retorna uma playlist específica|
-| POST   | `/playlists`   | Cria uma nova playlist          |
-| PUT    | `/playlists/:id`| Atualiza uma playlist          |
-| DELETE | `/playlists/:id`| Remove uma playlist            |
+| Método | Rota                    | Descrição                           |
+|--------|------------------------|-------------------------------------|
+| GET    | `/api/playlists`       | Lista todas as playlists            |
+| GET    | `/api/playlists/search`| Busca playlists por nome/descrição  |
+| GET    | `/api/playlists/by-song`| Busca playlists por música         |
+| GET    | `/api/playlists/:id`   | Retorna uma playlist específica     |
+| POST   | `/api/playlists`       | Cria uma nova playlist              |
+| PUT    | `/api/playlists/:id`   | Atualiza uma playlist              |
+| DELETE | `/api/playlists/:id`   | Remove uma playlist                 |
+| POST   | `/api/playlists/:id/songs` | Adiciona músicas à playlist     |
+| DELETE | `/api/playlists/:id/songs` | Remove músicas da playlist      |
+
+### 🔍 Filtros Disponíveis
+
+#### Playlists
+- **Filtrar por nome**: `/api/playlists?name=rock`
+- **Filtrar por música**: `/api/playlists?songId=123`
+- **Buscar em nome/descrição**: `/api/playlists/search?query=festa`
+- **Buscar por música**: `/api/playlists/by-song?song=shape` (aceita ID ou título)
+
+#### Songs
+- **Filtrar por título**: `/api/song?title=shape`
+- **Filtrar por artista**: `/api/song?artist=ed`
 
 ---
 
