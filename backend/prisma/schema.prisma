@@ -16,11 +16,11 @@ datasource db {
 model Playlist {
   id            Int            @id @default(autoincrement())
   name          String
-  description   String?        // opcional, descrição da playlist
+  description   String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
-  playlistSongs PlaylistSong[] // relação muitos-para-muitos via tabela intermediária
+  playlistSongs PlaylistSong[]
 }
 
 model Song {
@@ -29,11 +29,11 @@ model Song {
   artist        String?
   album         String?
   duration      Int?           // duração em segundos
-  url           String?        // URL do arquivo ou streaming
+  url           String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
-  playlistSongs PlaylistSong[] // relação muitos-para-muitos via tabela intermediária
+  playlistSongs PlaylistSong[]
 }
 
 model PlaylistSong {
@@ -43,7 +43,7 @@ model PlaylistSong {
   song       Song     @relation(fields: [songId], references: [id])
   songId     Int
 
-  order       Int?     // opcional: posição da música na playlist
+  order       Int?     // posição da música na playlist
 
-  @@unique([playlistId, songId]) // evita músicas duplicadas na mesma playlist
+  @@unique([playlistId, songId])
 }
