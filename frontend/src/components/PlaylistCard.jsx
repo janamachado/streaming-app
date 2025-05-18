@@ -12,6 +12,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong }) => {
       <Card.Header className="d-flex justify-content-between align-items-center bg-dark-subtle border-0 py-3">
         <div>
           <h5 className="card-title mb-1 text-truncate">{playlist.name}</h5>
+          <p className="text-dark small">{playlist.description}</p>
           <Badge bg="secondary" className="text-white">
             {songs.length} {songs.length === 1 ? 'música' : 'músicas'}
           </Badge>
@@ -48,7 +49,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong }) => {
                   className="bg-dark border-secondary d-flex justify-content-between align-items-center py-3"
                 >
                   <div className="text-truncate">
-                    <p className="mb-1 text-truncate">{song.title}</p>
+                    <p className="text-light mb-1 text-truncate">{song.title}</p>
                     <small className="text-secondary text-truncate">{song.artist}</small>
                   </div>
                   <Button
@@ -62,7 +63,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong }) => {
                 </ListGroup.Item>
               ))
             ) : (
-              <ListGroup.Item className="bg-dark text-secondary border-0 text-center py-4">
+              <ListGroup.Item className="bg-dark text-light border-0 text-center py-4">
                 <i className="bi bi-music-note-beamed d-block mb-2 fs-4"></i>
                 Nenhuma música adicionada
               </ListGroup.Item>
