@@ -12,6 +12,7 @@ body {
 .app-container {
   height: 100vh;
   padding: 1rem;
+  background-color: var(--bs-dark);
 }
 
 .main-content {
@@ -23,7 +24,7 @@ body {
   height: calc(100vh - 2rem);
   display: flex;
   flex-direction: column;
-  background: var(--bs-dark-bg-subtle);
+  background: var(--bs-light);
   border-radius: 0.5rem;
   overflow: hidden;
 }
@@ -55,7 +56,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--bs-dark-bg-subtle);
+  background: var(--bs-light);
   border-radius: 0.5rem;
 }
 
@@ -74,7 +75,7 @@ body {
 
 /* Estilos do input de busca */
 .form-control::placeholder {
-  color: var(--bs-secondary) !important;
+  color: var(--bs-light) !important;
   opacity: 0.65;
 }
 

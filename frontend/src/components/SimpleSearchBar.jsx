@@ -23,7 +23,7 @@ const SimpleSearchBar = ({ onSearch, placeholder }) => {
           placeholder={placeholder}
           value={query}
           onChange={handleChange}
-          className="bg-dark text-light border-secondary"
+          className="bg-dark text-dark border-secondary"
         />
         {query && (
           <Button
