@@ -45,7 +45,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong }) => {
             songs.length > 0 ? (
               songs.map((song) => (
                 <ListGroup.Item 
-                  key={song._id} 
+                  key={song.id} 
                   className="bg-dark border-secondary d-flex justify-content-between align-items-center py-3"
                 >
                   <div className="text-truncate">
@@ -55,7 +55,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong }) => {
                   <Button
                     variant="link"
                     className="text-danger p-0 ms-2"
-                    onClick={() => onRemoveSong(playlist._id, song._id)}
+                    onClick={() => onRemoveSong(playlist.id, song.id)}
                     title="Remover da playlist"
                   >
                     <i className="bi bi-x-circle"></i>
