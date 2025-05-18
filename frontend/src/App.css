@@ -77,10 +77,13 @@ body {
 }
 
 .playlists-grid {
-  flex: 1;
-  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
   padding: 1rem;
-  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .playlists-grid::-webkit-scrollbar {
@@ -122,6 +125,16 @@ body {
 }
 
 /* Estilos do Modal */
+.modal-fixed-height {
+  max-width: 500px;
+}
+
+.modal-fixed-height .modal-content {
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .dark-modal .modal-content {
   background-color: var(--bg-secondary);
   border-radius: var(--border-radius);
@@ -133,6 +146,7 @@ body {
 
 .dark-modal .modal-footer {
   border-top: 1px solid var(--bg-primary);
+  background-color: var(--bg-secondary);
 }
 
 .dark-modal .list-group-item {
@@ -146,17 +160,24 @@ body {
 
 .dark-modal .list-group-item:hover {
   background-color: var(--bg-primary);
-  transform: translateY(-2px);
+}
+
+.dark-modal .form-check {
+  width: 100%;
+}
+
+.dark-modal .form-check-input {
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.dark-modal .form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.dark-modal .form-check-label {
   cursor: pointer;
-}
-
-.dark-modal .list-group-item.selected-playlist {
-  background-color: var(--accent-primary) !important;
-  border-color: var(--accent-primary) !important;
-  color: white !important;
-}
-
-.dark-modal .list-group-item.selected-playlist:hover {
-  background-color: var(--accent-hover) !important;
-  border-color: var(--accent-hover) !important;
+  width: 100%;
+  margin-left: 0.5rem;
 }

@@ -276,27 +276,35 @@ function App() {
 
   return (
     <div className="app-container">
-      <Container className="py-4">
+      <Container className="py-2">
         <Row>
           <Col xs={12} lg={4}>
-            <div className="bg-dark rounded-3 p-4 mb-4 mb-lg-0 sticky-top" style={{ top: '1rem' }}>
-              <SongSearch onSearch={handleSongSearch} />
-              <div className="mt-4">
+            <div className="bg-dark rounded-3 p-3 mb-3 mb-lg-0 sticky-top" style={{ top: '0.5rem', height: 'calc(100vh - 1rem)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <h2 className="h4 mb-0 text-light">Músicas</h2>
+              </div>
+              <div className="mb-2">
+                <SongSearch onSearch={handleSongSearch} />
+              </div>
+              <div style={{ overflowY: 'auto', flex: 1 }}>
                 {filteredSongs.map((song) => (
                   <MusicItem
                     key={song.id}
                     song={song}
-                    onAddToPlaylist={() => setSelectedSong(song)}
+                    onAddToPlaylist={() => {
+                      setSelectedSong(song);
+                      setShowAddToPlaylistModal(true);
+                    }}
                   />
                 ))}
               </div>
             </div>
           </Col>
           <Col xs={12} lg={8}>
-            <div className="bg-dark rounded-3 p-4">
-              <div className="d-flex justify-content-between align-items-start mb-4">
+            <div className="bg-dark rounded-3 p-3" style={{ height: 'calc(100vh - 1rem)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+              <div className="d-flex justify-content-between align-items-center mb-2">
                 <div>
-                  <h2 className="h4 mb-1">Minhas Playlists</h2>
+                  <h2 className="h4 mb-1 text-light">Minhas Playlists</h2>
                   <p className="text-secondary mb-0">
                     {playlists.length} playlist{playlists.length !== 1 ? 's' : ''}
                   </p>
@@ -311,10 +319,12 @@ function App() {
                 </Button>
               </div>
 
-              <PlaylistSearch onSearch={handlePlaylistSearch} />
+              <div className="mb-2">
+                <PlaylistSearch onSearch={handlePlaylistSearch} />
+              </div>
 
-              <div className="mt-4">
-                <Row>
+              <div style={{ overflowY: 'auto', flex: 1, overflowX: 'hidden' }}>
+                <Row className="g-2 mx-0">
                   {loading ? (
                     <Col xs={12}>
                       <div className="text-center py-5">

@@ -18,6 +18,7 @@ function PlaylistSearch({ onSearch }) {
           id="searchInSongs"
           label="Buscar por músicas na playlist"
           onChange={(e) => handleSearch(document.querySelector('input[type="search"]').value)}
+          className="text-light"
         />
       </Form.Group>
     </div>

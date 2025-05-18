@@ -36,7 +36,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist
   return (
     <>
       <Card 
-        className="mb-3 bg-dark text-light border-secondary interactive" 
+        className="mb-2 bg-dark text-light border-secondary interactive" 
         onClick={() => setShowModal(true)}
       >
         <Card.Body className="d-flex justify-content-between align-items-center py-2">
