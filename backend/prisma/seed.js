@@ -2,6 +2,15 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
+  // Verifica se já existem músicas no banco
+  const existingSongs = await prisma.song.count();
+  
+  if (existingSongs > 0) {
+    console.log('ℹ️ O banco já contém dados. Pulando o seed...');
+    return;
+  }
+
+  console.log('🎵 Iniciando seed de músicas...');
   const songs = [
     {
       title: 'Bohemian Rhapsody',
