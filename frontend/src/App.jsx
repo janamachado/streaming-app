@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Button, Toast, ToastContainer } from 'react-bootstrap';
+import { Container, Row, Col, Button, Toast, ToastContainer, Modal } from 'react-bootstrap';
 import CreatePlaylistModal from './components/CreatePlaylistModal';
 import AddToPlaylistModal from './components/AddToPlaylistModal';
 import EditPlaylistModal from './components/EditPlaylistModal';
@@ -25,6 +25,7 @@ function App() {
   const [toast, setToast] = useState({ show: false, message: '', variant: 'danger' });
   const [loading, setLoading] = useState(true);
   const [filteredPlaylists, setFilteredPlaylists] = useState([]);
+  const [playlistToDelete, setPlaylistToDelete] = useState(null);
   // Constants
   const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -161,24 +162,30 @@ function App() {
     }
   };
 
-  const handleDeletePlaylist = async (playlistId) => {
-    try {
-      await axios.delete(`${API_BASE_URL}/playlists/${playlistId}`);
-      const updatedPlaylists = playlists.filter(p => p.id !== playlistId);
-      setPlaylists(updatedPlaylists);
-      setFilteredPlaylists(updatedPlaylists);
-      setShowDeleteModal(false);
-      setSelectedPlaylist(null);
-    } catch (error) {
-      handleApiError(error, "Não foi possível excluir a playlist. Por favor, tente novamente.");
-    }
-  };
-
   const confirmDeletePlaylist = (playlistId) => {
     const playlist = playlists.find(p => p.id === playlistId);
     if (playlist) {
-      setSelectedPlaylist(playlist);
+      setPlaylistToDelete(playlist);
       setShowDeleteModal(true);
+    }
+  };
+
+  const handleDeletePlaylist = async () => {
+    if (!playlistToDelete) return;
+    try {
+      await axios.delete(`${API_BASE_URL}/playlists/${playlistToDelete.id}`);
+      const updatedPlaylists = playlists.filter(p => p.id !== playlistToDelete.id);
+      setPlaylists(updatedPlaylists);
+      setFilteredPlaylists(updatedPlaylists);
+      setShowDeleteModal(false);
+      setPlaylistToDelete(null);
+      setToast({
+        show: true,
+        message: 'Playlist excluída com sucesso!',
+        variant: 'success'
+      });
+    } catch (error) {
+      handleApiError(error, "Não foi possível excluir a playlist. Por favor, tente novamente.");
     }
   };
 
@@ -186,13 +193,12 @@ function App() {
     if (!selectedSong || !playlistIds?.length) return;
     
     try {
-      // Adiciona a música a cada playlist sequencialmente
       for (const playlistId of playlistIds) {
         const numericPlaylistId = parseInt(playlistId);
-        if (isNaN(numericPlaylistId)) continue; // Pula se não for um número válido
+        if (isNaN(numericPlaylistId)) continue; 
 
         await axios.post(`${API_BASE_URL}/playlists/${numericPlaylistId}/songs`, { 
-          songIds: [parseInt(selectedSong.id)] // Convertendo para número
+          songIds: [parseInt(selectedSong.id)] 
         });
       }
       
@@ -211,7 +217,6 @@ function App() {
       await axios.delete(`${API_BASE_URL}/playlists/${playlistId}/songs`, {
         data: { songIds: songIds.map(id => parseInt(id)) }
       });
-      // Atualiza localmente a playlist
       const updatedPlaylists = playlists.map(p => {
         if (p.id === playlistId) {
           return {
@@ -252,7 +257,6 @@ function App() {
       setFilteredSongs(filtered);
     } catch (err) {
       handleApiError(err, 'Erro ao filtrar músicas');
-      // Mantém o estado anterior em caso de erro
       setFilteredSongs(songs);
     }
   };
@@ -270,99 +274,62 @@ function App() {
     }
   };
 
-
   return (
     <div className="app-container">
-      <Container fluid className="py-4 bg-dark min-vh-100">
-      <ToastContainer 
-        className="p-3" 
-        position="top-end"
-        style={{ zIndex: 1000 }}
-      >
-        <Toast 
-          show={toast.show} 
-          onClose={() => setToast(prev => ({ ...prev, show: false }))} 
-          delay={5000} 
-          autohide
-          bg={toast.variant}
-        >
-          <Toast.Header closeButton>
-            <strong className="me-auto">Aviso</strong>
-          </Toast.Header>
-          <Toast.Body className={toast.variant === 'danger' ? 'text-white' : ''}>
-            {toast.message}
-          </Toast.Body>
-        </Toast>
-      </ToastContainer>
-      <Row className="h-100 g-4">
-          {/* Left Sidebar - Songs */}
-          <Col md={4} lg={3}>
-            <div className="songs-section shadow-sm">
-              <div className="songs-header">
-                <h2 className="fs-4 fw-bold mb-3">Músicas Disponíveis</h2>
-                <SongSearch onSearch={handleSongSearch} />
-              </div>
-              <div className="songs-list-container">
-                {loading ? (
-                  <p className="text-center text-secondary">Carregando músicas...</p>
-                ) : (
-                  <div className="songs-list">
-                    {filteredSongs.length === 0 ? (
-                      <p className="text-center text-secondary">Nenhuma música encontrada</p>
-                    ) : (
-                      filteredSongs.map((song) => (
-                        <MusicItem
-                          key={song.id}
-                          song={song}
-                          onAddToPlaylist={() => {
-                            setSelectedSong(song);
-                            setShowAddToPlaylistModal(true);
-                          }}
-                        />
-                      ))
-                    )}
-                  </div>
-                )}
+      <Container className="py-4">
+        <Row>
+          <Col xs={12} lg={4}>
+            <div className="bg-dark rounded-3 p-4 mb-4 mb-lg-0 sticky-top" style={{ top: '1rem' }}>
+              <SongSearch onSearch={handleSongSearch} />
+              <div className="mt-4">
+                {filteredSongs.map((song) => (
+                  <MusicItem
+                    key={song.id}
+                    song={song}
+                    onAddToPlaylist={() => setSelectedSong(song)}
+                  />
+                ))}
               </div>
             </div>
           </Col>
-
-          {/* Main Content - Playlists */}
-          <Col md={8} lg={9}>
-            <div className="playlists-section shadow-sm">
-              <div className="playlists-header">
-                <div className="d-flex align-items-center justify-content-between mb-3">
-                  <h2 className="fs-4 fw-bold mb-0">Minhas Playlists</h2>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => setIsModalOpen(true)}
-                    className="rounded-pill px-3"
-                  >
-                    <span className="me-2">Nova Playlist</span>
-                    <i className="bi bi-plus-circle"></i>
-                  </Button>
+          <Col xs={12} lg={8}>
+            <div className="bg-dark rounded-3 p-4">
+              <div className="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                  <h2 className="h4 mb-1">Minhas Playlists</h2>
+                  <p className="text-secondary mb-0">
+                    {playlists.length} playlist{playlists.length !== 1 ? 's' : ''}
+                  </p>
                 </div>
-                <PlaylistSearch onSearch={handlePlaylistSearch} />
+                <Button
+                  variant="primary"
+                  onClick={() => setIsModalOpen(true)}
+                  className="rounded-pill px-3"
+                >
+                  <i className="bi bi-plus-lg me-2"></i>
+                  Nova Playlist
+                </Button>
               </div>
-              
-              <div className="playlists-grid">
-                <Row className="g-4">
+
+              <PlaylistSearch onSearch={handlePlaylistSearch} />
+
+              <div className="mt-4">
+                <Row>
                   {loading ? (
                     <Col xs={12}>
-                      <p className="text-center text-secondary">Carregando playlists...</p>
+                      <div className="text-center py-5">
+                        <div className="spinner-border text-primary" role="status">
+                          <span className="visually-hidden">Carregando...</span>
+                        </div>
+                      </div>
                     </Col>
                   ) : filteredPlaylists.length === 0 ? (
                     <Col xs={12}>
-                      <p className="text-center text-secondary">Nenhuma playlist encontrada</p>
-                    </Col>
-                  ) : playlists.length === 0 ? (
-                    <Col xs={12}>
                       <div className="text-center py-5">
-                        <p className="text-secondary mb-3">Nenhuma playlist criada</p>
+                        <i className="bi bi-music-note-list display-4 text-secondary mb-3"></i>
+                        <h3 className="h5 text-secondary">Nenhuma playlist encontrada</h3>
                         <Button
-                          variant="outline-primary"
-                          size="sm"
+                          variant="primary"
                           onClick={() => setIsModalOpen(true)}
                           className="rounded-pill px-3"
                         >
@@ -371,10 +338,9 @@ function App() {
                       </div>
                     </Col>
                   ) : (
-                    (filteredPlaylists).map((playlist) => (
-                      <Col key={playlist._id} xs={12} md={6} xl={4}>
+                    filteredPlaylists.map((playlist) => (
+                      <Col key={playlist.id} xs={12} md={6} xl={4}>
                         <PlaylistCard
-                          key={playlist.id}
                           playlist={playlist}
                           onDeletePlaylist={confirmDeletePlaylist}
                           onRemoveSong={handleRemoveSong}
@@ -414,50 +380,53 @@ function App() {
         playlist={selectedPlaylist}
       />
 
-      <DeletePlaylistModal
+      <Modal
         show={showDeleteModal}
         onHide={() => {
           setShowDeleteModal(false);
-          setSelectedPlaylist(null);
+          setPlaylistToDelete(null);
         }}
-        onConfirm={handleDeletePlaylist}
-        playlist={selectedPlaylist}
-      />
+        centered
+        className="dark-modal"
+      >
+        <Modal.Header closeButton className="bg-dark text-light border-secondary">
+          <Modal.Title>Excluir Playlist</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="bg-dark text-light">
+          <p>Tem certeza que deseja excluir a playlist "{playlistToDelete?.name}"?</p>
+          <p className="text-secondary mb-0">
+            Esta ação não pode ser desfeita e todas as músicas serão removidas da playlist.
+          </p>
+        </Modal.Body>
+        <Modal.Footer className="bg-dark border-secondary">
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setShowDeleteModal(false);
+              setPlaylistToDelete(null);
+            }}
+          >
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={handleDeletePlaylist}>
+            Excluir
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-      {/* Song selection modal */}
-      {selectedSong && (
-        <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50">
-          <div className="bg-zinc-800 rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-medium text-white mb-4">
-              Adicionar "{selectedSong.title}" à playlist:
-            </h3>
-            <div className="space-y-2">
-              {playlists.map(playlist => (
-                <button
-                  key={playlist._id}
-                  onClick={() => {
-                    handleAddToPlaylist(playlist._id, selectedSong._id);
-                    setSelectedSong(null);
-                  }}
-                  className="w-full text-left px-4 py-2 text-white hover:bg-gray-700/50 rounded-lg transition-colors"
-                >
-                  {playlist.name}
-                </button>
-              ))}
-            </div>
-            <div className="mt-4 flex justify-end">
-              <button
-                onClick={() => setSelectedSong(null)}
-                className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors"
-              >
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ToastContainer position="top-end" className="p-3">
+        <Toast
+          show={toast.show}
+          onClose={() => setToast({ ...toast, show: false })}
+          bg={toast.variant}
+          delay={3000}
+          autohide
+        >
+          <Toast.Body className="text-white">{toast.message}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 }
 
-export default App
+export default App;
