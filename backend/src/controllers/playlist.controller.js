@@ -83,13 +83,7 @@ class PlaylistController {
   async addSongs(req, res, next) {
     try {
       const playlistId = parseInt(req.params.id);
-      const { songIds } = req.body;
-      
-      if (!Array.isArray(songIds) || songIds.length === 0) {
-        throw { type: 'ValidationError', message: 'songIds must be a non-empty array' };
-      }
-
-      const playlist = await playlistService.addSongs(playlistId, songIds);
+      const playlist = await playlistService.addSongs(playlistId, req.body);
       res.json(playlist);
     } catch (error) {
       next(error);
@@ -99,13 +93,7 @@ class PlaylistController {
   async removeSongs(req, res, next) {
     try {
       const playlistId = parseInt(req.params.id);
-      const { songIds } = req.body;
-      
-      if (!Array.isArray(songIds) || songIds.length === 0) {
-        throw { type: 'ValidationError', message: 'songIds must be a non-empty array' };
-      }
-
-      const playlist = await playlistService.removeSongs(playlistId, songIds);
+      const playlist = await playlistService.removeSongs(playlistId, req.body);
       res.json(playlist);
     } catch (error) {
       next(error);

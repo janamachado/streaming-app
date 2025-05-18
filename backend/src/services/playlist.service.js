@@ -1,36 +1,46 @@
 const { PrismaClient } = require('@prisma/client');
+const { createPlaylistSchema, updatePlaylistSchema } = require('../schemas/playlist.schema');
+const { playlistSongsSchema } = require('../schemas/playlist-songs.schema');
 const prisma = new PrismaClient();
 
 class PlaylistService {
   async create(data) {
-    // Verifica se já existe playlist com o mesmo nome
-    const existingPlaylist = await prisma.playlist.findFirst({
-      where: {
-        name: {
-          equals: data.name,
-          mode: 'insensitive' // case-insensitive
-        }
-      }
-    });
+    try {
+      // Valida e sanitiza os dados usando Zod
+      const validatedData = createPlaylistSchema.parse(data);
 
-    if (existingPlaylist) {
-      throw { type: 'ValidationError', message: 'A playlist with this name already exists' };
-    }
-
-    const newPlaylist = await prisma.playlist.create({
-      data: {
-        name: data.name,
-        description: data.description
-      },
-      include: {
-        playlistSongs: {
-          include: {
-            song: true
+      // Verifica se já existe playlist com o mesmo nome
+      const existingPlaylist = await prisma.playlist.findFirst({
+        where: {
+          name: {
+            equals: validatedData.name,
+            mode: 'insensitive' // case-insensitive
           }
         }
+      });
+
+      if (existingPlaylist) {
+        throw { type: 'ValidationError', message: 'Já existe uma playlist com este nome' };
       }
-    });
-    return newPlaylist;
+
+      const newPlaylist = await prisma.playlist.create({
+        data: validatedData,
+        include: {
+          playlistSongs: {
+            include: {
+              song: true
+            }
+          }
+        }
+      });
+      return newPlaylist;
+    } catch (error) {
+      if (error.errors) {
+        // Erro de validação do Zod
+        throw { type: 'ValidationError', message: error.errors[0].message };
+      }
+      throw error;
+    }
   }
 
   async findAll(filters = {}) {
@@ -159,46 +169,56 @@ class PlaylistService {
   }
 
   async update(id, data) {
-    const playlist = await prisma.playlist.findUnique({ where: { id } });
-    if (!playlist) {
-      throw { type: 'NotFoundError', message: 'Playlist not found' };
-    }
+    try {
+      // Valida e sanitiza os dados usando Zod
+      const validatedData = updatePlaylistSchema.parse(data);
 
-    // Se o nome está sendo alterado, verifica duplicidade
-    if (data.name && data.name !== playlist.name) {
-      const existingPlaylist = await prisma.playlist.findFirst({
-        where: {
-          name: {
-            equals: data.name,
-            mode: 'insensitive'
-          },
-          id: {
-            not: id
+      const playlist = await prisma.playlist.findUnique({ where: { id } });
+      if (!playlist) {
+        throw { type: 'NotFoundError', message: 'Playlist não encontrada' };
+      }
+
+      // Se o nome está sendo alterado, verifica duplicidade
+      if (validatedData.name && validatedData.name !== playlist.name) {
+        const existingPlaylist = await prisma.playlist.findFirst({
+          where: {
+            name: {
+              equals: validatedData.name,
+              mode: 'insensitive'
+            },
+            id: {
+              not: id
+            }
+          }
+        });
+
+        if (existingPlaylist) {
+          throw { type: 'ValidationError', message: 'Já existe uma playlist com este nome' };
+        }
+      }
+
+      const updatedPlaylist = await prisma.playlist.update({
+        where: { id },
+        data: {
+          ...validatedData,
+          updatedAt: new Date()
+        },
+        include: {
+          playlistSongs: {
+            include: {
+              song: true
+            }
           }
         }
       });
-
-      if (existingPlaylist) {
-        throw { type: 'ValidationError', message: 'A playlist with this name already exists' };
+      return updatedPlaylist;
+    } catch (error) {
+      if (error.errors) {
+        // Erro de validação do Zod
+        throw { type: 'ValidationError', message: error.errors[0].message };
       }
+      throw error;
     }
-
-    const updatedPlaylist = await prisma.playlist.update({
-      where: { id },
-      data: {
-        name: data.name,
-        description: data.description,
-        updatedAt: new Date()
-      },
-      include: {
-        playlistSongs: {
-          include: {
-            song: true
-          }
-        }
-      }
-    });
-    return updatedPlaylist;
   }
 
   async delete(id) {
@@ -209,115 +229,98 @@ class PlaylistService {
     await prisma.playlist.delete({ where: { id } });
   }
 
-  async addSongs(playlistId, songIds) {
-    // Verifica se a playlist existe
-    const playlist = await prisma.playlist.findUnique({
-      where: { id: playlistId },
-      include: {
-        playlistSongs: true
+  async addSongs(playlistId, data) {
+    try {
+      const { songIds } = playlistSongsSchema.parse(data);
+
+      const playlist = await prisma.playlist.findUnique({ where: { id: playlistId } });
+      if (!playlist) {
+        throw { type: 'NotFoundError', message: 'Playlist não encontrada' };
       }
-    });
 
-    if (!playlist) {
-      throw { type: 'NotFoundError', message: 'Playlist not found' };
-    }
-
-    // Verifica se todas as músicas existem
-    const songs = await prisma.song.findMany({
-      where: {
-        id: {
-          in: songIds
-        }
-      }
-    });
-
-    if (songs.length !== songIds.length) {
-      throw { type: 'ValidationError', message: 'One or more songs not found' };
-    }
-
-    // Verifica quais músicas já estão na playlist
-    const existingSongs = playlist.playlistSongs.map(ps => ps.songId);
-    const newSongIds = songIds.filter(id => !existingSongs.includes(id));
-
-    if (newSongIds.length === 0) {
-      throw { type: 'ValidationError', message: 'All songs are already in the playlist' };
-    }
-
-    // Encontra a última ordem na playlist
-    const lastOrder = playlist.playlistSongs.reduce((max, ps) => 
-      ps.order > max ? ps.order : max, 0);
-
-    // Cria as novas relações playlist-música apenas para músicas que ainda não existem
-    const createSongs = newSongIds.map((songId, index) => {
-      return prisma.playlistSong.create({
-        data: {
-          playlistId,
-          songId,
-          order: lastOrder + index + 1
+      // Verifica se todas as músicas existem
+      const songs = await prisma.song.findMany({
+        where: {
+          id: {
+            in: songIds
+          }
         }
       });
-    });
 
-    // Executa todas as operações em uma transação
-    await prisma.$transaction(createSongs);
+      if (songs.length !== songIds.length) {
+        throw { type: 'ValidationError', message: 'Uma ou mais músicas não foram encontradas' };
+      }
 
-    // Retorna a playlist atualizada com as novas músicas
-    return this.findOne(playlistId);
+      // Adiciona as músicas à playlist
+      await prisma.playlistSong.createMany({
+        data: songIds.map(songId => ({
+          playlistId,
+          songId
+        })),
+        skipDuplicates: true
+      });
+
+      // Retorna a playlist atualizada
+      return await prisma.playlist.findUnique({
+        where: { id: playlistId },
+        include: {
+          playlistSongs: {
+            include: {
+              song: true
+            }
+          }
+        }
+      });
+    } catch (error) {
+      if (error.errors) {
+        throw { type: 'ValidationError', message: error.errors[0].message };
+      }
+      throw error;
+    }
   }
 
-  async removeSongs(playlistId, songIds) {
-    // Verifica se a playlist existe
-    const playlist = await prisma.playlist.findUnique({
-      where: { id: playlistId },
-      include: {
-        playlistSongs: true
-      }
-    });
+  async removeSongs(playlistId, data) {
+    try {
+      const { songIds } = playlistSongsSchema.parse(data);
 
-    if (!playlist) {
-      throw { type: 'NotFoundError', message: 'Playlist not found' };
-    }
-
-    // Verifica se as músicas estão na playlist
-    const playlistSongIds = playlist.playlistSongs
-      .filter(ps => songIds.includes(ps.songId))
-      .map(ps => ps.id);
-
-    if (playlistSongIds.length !== songIds.length) {
-      throw { type: 'ValidationError', message: 'One or more songs are not in the playlist' };
-    }
-
-    // Remove as músicas da playlist
-    await prisma.playlistSong.deleteMany({
-      where: {
-        id: {
-          in: playlistSongIds
+      const playlist = await prisma.playlist.findUnique({
+        where: { id: playlistId },
+        include: {
+          playlistSongs: true
         }
-      }
-    });
-
-    // Reordena as músicas restantes
-    const remainingPlaylistSongs = await prisma.playlistSong.findMany({
-      where: {
-        playlistId
-      },
-      orderBy: {
-        order: 'asc'
-      }
-    });
-
-    // Atualiza a ordem das músicas restantes
-    const updateOrders = remainingPlaylistSongs.map((ps, index) => {
-      return prisma.playlistSong.update({
-        where: { id: ps.id },
-        data: { order: index + 1 }
       });
-    });
 
-    await prisma.$transaction(updateOrders);
+      if (!playlist) {
+        throw { type: 'NotFoundError', message: 'Playlist não encontrada' };
+      }
 
-    // Retorna a playlist atualizada
-    return this.findOne(playlistId);
+      // Remove as músicas da playlist
+      await prisma.playlistSong.deleteMany({
+        where: {
+          playlistId,
+          songId: {
+            in: songIds
+          }
+        }
+      });
+
+      // Retorna a playlist atualizada
+      return await prisma.playlist.findUnique({
+        where: { id: playlistId },
+        include: {
+          playlistSongs: {
+            include: {
+              song: true
+            }
+          }
+        }
+      });
+    } catch (error) {
+      if (error.errors) {
+        throw { type: 'ValidationError', message: error.errors[0].message };
+      }
+      throw error;
+    }
   }
 }
 

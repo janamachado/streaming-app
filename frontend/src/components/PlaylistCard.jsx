@@ -4,7 +4,7 @@ import { Card, Button, Badge, ListGroup, Form } from 'react-bootstrap';
 const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedSongs, setSelectedSongs] = useState([]);
-  
+ 
   // Garantir que playlist.songs existe
   const songs = playlist.songs || [];
 
