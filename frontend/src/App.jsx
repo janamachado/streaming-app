@@ -4,6 +4,7 @@ import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
 import CreatePlaylistModal from './components/CreatePlaylistModal';
 import AddToPlaylistModal from './components/AddToPlaylistModal';
 import EditPlaylistModal from './components/EditPlaylistModal';
+import DeletePlaylistModal from './components/DeletePlaylistModal';
 import PlaylistCard from './components/PlaylistCard';
 import MusicItem from './components/MusicItem';
 import SongSearch from './components/SongSearch';
@@ -20,6 +21,7 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showEditPlaylistModal, setShowEditPlaylistModal] = useState(false);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filteredPlaylists, setFilteredPlaylists] = useState([]);
@@ -136,14 +138,21 @@ function App() {
   const handleDeletePlaylist = async (playlistId) => {
     try {
       await axios.delete(`${API_BASE_URL}/playlists/${playlistId}`);
-      setPlaylists(prevPlaylists => 
-        prevPlaylists.filter(playlist => playlist._id !== playlistId)
-      );
-      setFilteredPlaylists(prevPlaylists => 
-        prevPlaylists.filter(playlist => playlist._id !== playlistId)
-      );
+      const updatedPlaylists = await fetchPlaylists();
+      setPlaylists(updatedPlaylists);
+      setFilteredPlaylists(updatedPlaylists);
+      setShowDeleteModal(false);
+      setSelectedPlaylist(null);
     } catch (error) {
-      handleApiError(error, "Não foi possível deletar a playlist. Por favor, tente novamente.");
+      handleApiError(error, "Não foi possível excluir a playlist. Por favor, tente novamente.");
+    }
+  };
+
+  const confirmDeletePlaylist = (playlistId) => {
+    const playlist = playlists.find(p => p.id === playlistId);
+    if (playlist) {
+      setSelectedPlaylist(playlist);
+      setShowDeleteModal(true);
     }
   };
 
@@ -313,7 +322,7 @@ function App() {
                         <PlaylistCard
                           key={playlist.id}
                           playlist={playlist}
-                          onDeletePlaylist={handleDeletePlaylist}
+                          onDeletePlaylist={confirmDeletePlaylist}
                           onRemoveSong={handleRemoveSong}
                           onEditPlaylist={handleEditPlaylist}
                         />
@@ -348,6 +357,16 @@ function App() {
           setSelectedPlaylist(null);
         }}
         onSave={handleSavePlaylist}
+        playlist={selectedPlaylist}
+      />
+
+      <DeletePlaylistModal
+        show={showDeleteModal}
+        onHide={() => {
+          setShowDeleteModal(false);
+          setSelectedPlaylist(null);
+        }}
+        onConfirm={handleDeletePlaylist}
         playlist={selectedPlaylist}
       />
 
