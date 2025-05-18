@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Button, Alert, Modal } from 'react-bootstrap';
 import CreatePlaylistModal from './components/CreatePlaylistModal';
 import AddToPlaylistModal from './components/AddToPlaylistModal';
 import EditPlaylistModal from './components/EditPlaylistModal';
@@ -23,6 +23,8 @@ function App() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filteredPlaylists, setFilteredPlaylists] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [playlistToDelete, setPlaylistToDelete] = useState(null);
   // Constants
   const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -133,17 +135,26 @@ function App() {
     }
   };
 
-  const handleDeletePlaylist = async (playlistId) => {
+  const confirmDeletePlaylist = (playlistId) => {
+    const playlist = playlists.find(p => p.id === playlistId);
+    if (playlist) {
+      setPlaylistToDelete(playlist);
+      setShowDeleteModal(true);
+    }
+  };
+
+  const handleDeletePlaylist = async () => {
+    if (!playlistToDelete) return;
+
     try {
-      await axios.delete(`${API_BASE_URL}/playlists/${playlistId}`);
-      setPlaylists(prevPlaylists => 
-        prevPlaylists.filter(playlist => playlist._id !== playlistId)
-      );
-      setFilteredPlaylists(prevPlaylists => 
-        prevPlaylists.filter(playlist => playlist._id !== playlistId)
-      );
+      await axios.delete(`${API_BASE_URL}/playlists/${playlistToDelete.id}`);
+      const updatedPlaylists = playlists.filter(p => p.id !== playlistToDelete.id);
+      setPlaylists(updatedPlaylists);
+      setFilteredPlaylists(updatedPlaylists);
+      setShowDeleteModal(false);
+      setPlaylistToDelete(null);
     } catch (error) {
-      handleApiError(error, "Não foi possível deletar a playlist. Por favor, tente novamente.");
+      handleApiError(error, "Não foi possível excluir a playlist. Por favor, tente novamente.");
     }
   };
 
@@ -267,60 +278,60 @@ function App() {
           {/* Main Content - Playlists */}
           <Col md={8} lg={9}>
             <div className="playlists-section shadow-sm">
-              <div className="playlists-header">
-                <div className="d-flex align-items-center justify-content-between mb-3">
-                  <h2 className="fs-4 fw-bold mb-0">Minhas Playlists</h2>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => setIsModalOpen(true)}
-                    className="rounded-pill px-3"
-                  >
-                    <span className="me-2">Nova Playlist</span>
-                    <i className="bi bi-plus-circle"></i>
-                  </Button>
+              <div className="playlists-container">
+                <div className="playlists-header">
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h2 className="h4 mb-0">Minhas Playlists</h2>
+                    <Button
+                      variant="primary"
+                      onClick={() => setIsModalOpen(true)}
+                      className="rounded-pill px-3"
+                    >
+                      <span className="me-2">Nova Playlist</span>
+                      <i className="bi bi-plus-circle"></i>
+                    </Button>
+                  </div>
+                  <PlaylistSearch onSearch={handlePlaylistSearch} />
                 </div>
-                <PlaylistSearch onSearch={handlePlaylistSearch} />
-              </div>
-              
-              <div className="playlists-grid">
-                <Row className="g-4">
-                  {loading ? (
-                    <Col xs={12}>
-                      <p className="text-center text-secondary">Carregando playlists...</p>
-                    </Col>
-                  ) : error ? (
-                    <Col xs={12}>
-                      <p className="text-center text-danger">{error}</p>
-                    </Col>
-                  ) : playlists.length === 0 ? (
-                    <Col xs={12}>
-                      <div className="text-center py-5">
-                        <p className="text-secondary mb-3">Nenhuma playlist criada</p>
-                        <Button
-                          variant="outline-primary"
-                          size="sm"
-                          onClick={() => setIsModalOpen(true)}
-                          className="rounded-pill px-3"
-                        >
-                          Criar Primeira Playlist
-                        </Button>
-                      </div>
-                    </Col>
-                  ) : (
-                    (filteredPlaylists).map((playlist) => (
-                      <Col key={playlist._id} xs={12} md={6} xl={4}>
-                        <PlaylistCard
-                          key={playlist.id}
-                          playlist={playlist}
-                          onDeletePlaylist={handleDeletePlaylist}
-                          onRemoveSong={handleRemoveSong}
-                          onEditPlaylist={handleEditPlaylist}
-                        />
+                
+                <div className="playlists-grid">
+                  <Row className="g-2">
+                    {loading ? (
+                      <Col xs={12}>
+                        <p className="text-center text-secondary">Carregando playlists...</p>
                       </Col>
-                    ))
-                  )}
-                </Row>
+                    ) : error ? (
+                      <Col xs={12}>
+                        <p className="text-center text-danger">{error}</p>
+                      </Col>
+                    ) : filteredPlaylists.length === 0 ? (
+                      <Col xs={12}>
+                        <div className="text-center py-5">
+                          <p className="text-secondary mb-3">Nenhuma playlist criada</p>
+                          <Button
+                            variant="outline-primary"
+                            size="sm"
+                            onClick={() => setIsModalOpen(true)}
+                            className="rounded-pill px-3"
+                          >
+                            Criar Primeira Playlist
+                          </Button>
+                        </div>
+                      </Col>
+                    ) : (
+                      filteredPlaylists.map((playlist) => (
+                        <Col key={playlist.id} xs={12} md={6} xl={4}>
+                          <PlaylistCard
+                            playlist={playlist}
+                            onDeletePlaylist={confirmDeletePlaylist}
+                            onRemoveSong={handleRemoveSong}
+                            onEditPlaylist={handleEditPlaylist}
+                          />
+                        </Col>
+                      ))
+                    )}
+                  </Row>
+                </div>
               </div>
             </div>
           </Col>
@@ -350,6 +361,41 @@ function App() {
         onSave={handleSavePlaylist}
         playlist={selectedPlaylist}
       />
+
+      {/* Delete Playlist Modal */}
+      <Modal
+        show={showDeleteModal}
+        onHide={() => {
+          setShowDeleteModal(false);
+          setPlaylistToDelete(null);
+        }}
+        centered
+        className="dark-modal"
+      >
+        <Modal.Header closeButton className="bg-dark text-light border-secondary">
+          <Modal.Title>Excluir Playlist</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="bg-dark text-light">
+          <p>Tem certeza que deseja excluir a playlist "{playlistToDelete?.name}"?</p>
+          <p className="text-secondary mb-0">
+            Esta ação não pode ser desfeita e todas as músicas serão removidas da playlist.
+          </p>
+        </Modal.Body>
+        <Modal.Footer className="bg-dark border-secondary">
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setShowDeleteModal(false);
+              setPlaylistToDelete(null);
+            }}
+          >
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={handleDeletePlaylist}>
+            Excluir
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {/* Song selection modal */}
       {selectedSong && (
