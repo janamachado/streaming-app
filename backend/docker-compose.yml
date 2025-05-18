@@ -34,7 +34,12 @@ services:
       - /usr/src/app/node_modules
     networks:
       - app-network
-    command: sh -c "npx prisma migrate dev --name init && npx prisma db seed && npm run dev"
+    command: >
+      sh -c '
+        npx prisma migrate deploy &&
+        npx prisma db seed &&
+        npm run dev
+      '
 
 networks:
   app-network:
