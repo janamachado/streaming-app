@@ -2,139 +2,101 @@
 
 Este é o backend de uma aplicação de streaming de músicas, com foco na gestão de playlists e músicas. Desenvolvido com **Node.js**, **Express**, **Prisma** e banco de dados **PostgreSQL**.
 
----
-
-## 📦 Tecnologias Utilizadas
+## 🛠️ Tecnologias
 
 - Node.js
 - Express.js
 - PostgreSQL
 - Prisma ORM
+- Docker
 
----
+## 🚀 Executando o Projeto Localmente
 
-## 🚀 Como rodar o projeto localmente
-
-### 1. Clonar o repositório
-
+1. Clone o repositório:
 ```bash
 git clone https://github.com/janamachado/streaming-app
 cd streaming-app/backend
 ```
 
-### 2. Instalar dependências
-
+2. Instale as dependências:
 ```bash
 npm install
 ```
 
-### 3. Criar o arquivo `.env`
-
-Crie um arquivo `.env` baseado no `.env.example`:
-
-```
+3. Configure o arquivo `.env`:
+```env
 DATABASE_URL="postgresql://postgres:senha@localhost:5432/streaming_app?schema=public"
 ```
 
-> ⚠️ Substitua os dados de conexão com os seus próprios.
+4. Execute as migrations:
+```bash
+npx prisma migrate dev
+```
 
----
+5. Inicie o servidor:
+```bash
+npm run dev
+```
 
-## 🧩 Configuração do Banco de Dados
+> ⚠️ Certifique-se de ter o Node.js e PostgreSQL instalados localmente.
 
-### Instalações necessárias
+## 🗄️ Banco de Dados e Prisma
 
-- Instale o **PostgreSQL** em sua máquina.
-- Crie um banco chamado `streaming_app`.
-- A senha e usuário devem constar no `.env`.
+### Configuração PostgreSQL
 
-### Prisma
+1. Instale o PostgreSQL
+2. Crie um banco chamado `streaming_app`
+3. Configure as credenciais no `.env`
 
-Para iniciar o Prisma:
+### Comandos Prisma
 
 ```bash
+# Inicializar Prisma
 npx prisma init
-```
 
-Para criar as tabelas no banco:
+# Gerar cliente Prisma
+npx prisma generate
 
-```bash
-npx prisma migrate dev --name init
-```
+# Criar/atualizar tabelas
+npx prisma migrate dev
 
-Para abrir o visualizador do banco:
+# Popular banco com dados iniciais
+npx prisma db seed
 
-```bash
+# Visualizar banco de dados
 npx prisma studio
 ```
 
-### 🧬 Gerando os primeiros dados essenciais: seed
+### Modelos
 
-Após instalar as dependências e configurar o arquivo `.env`, é necessário gerar o Prisma Client com o comando:
+#### Song
+| Campo     | Tipo     |
+|-----------|----------|
+| id        | Int (PK) |
+| title     | String   |
+| artist    | String   |
+| album     | String   |
+| duration  | Int      |
+| createdAt | DateTime |
 
-```bash
-npx prisma generate
-```
-
-Executar o script de seed:
-
-```bash
-npx prisma db seed
-```
----
-
-## 📁 Estrutura inicial do banco de dados
-
-O banco atualmente possui dois modelos:
-
-### `Song`
-
-| Campo       | Tipo     |
-|-------------|----------|
-| id          | Int (PK) |
-| title       | String   |
-| artist      | String   |
-| album       | String   |
-| duration    | Int      |
-| createdAt   | DateTime |
-
-### `Playlist`
-
+#### Playlist
 | Campo       | Tipo     |
 |-------------|----------|
 | id          | Int (PK) |
 | name        | String   |
 | description | String   |
-| songs       | relação com Song[] |
+| songs       | Song[]   |
 | createdAt   | DateTime |
 
 ---
 
-## 📚 Documentação da API
+### 📚 Documentação da API
 
-A API possui documentação interativa usando Swagger/OpenAPI. Para acessá-la:
+A documentação interativa está disponível em `http://localhost:3000/api-docs` após iniciar o servidor.
 
-1. Inicie o servidor:
-   ```bash
-   cd backend
-   npm run dev
-   ```
+### Endpoints
 
-2. Acesse a documentação em:
-   ```
-   http://localhost:3000/api-docs
-   ```
-
-### 🔍 Recursos da Documentação
-
-- Interface interativa para testar todos os endpoints
-- Descrição detalhada de cada rota
-- Exemplos de requisição e resposta
-- Schemas dos modelos de dados
-- Códigos de status e mensagens de erro
-
-### 🎵 Songs
-
+#### Músicas
 | Método | Rota           | Descrição                     |
 |--------|----------------|-------------------------------|
 | GET    | `/api/song`    | Lista todas as músicas        |
@@ -143,19 +105,21 @@ A API possui documentação interativa usando Swagger/OpenAPI. Para acessá-la:
 | PUT    | `/api/song/:id`| Atualiza uma música           |
 | DELETE | `/api/song/:id`| Remove uma música             |
 
-### 📚 Playlists
+#### Playlists
+| Método | Rota                     | Descrição                      |
+|--------|--------------------------|--------------------------------|
+| GET    | `/api/playlists`         | Lista todas as playlists       |
+| GET    | `/api/playlists/:id`     | Retorna uma playlist específica|
+| POST   | `/api/playlists`         | Cria uma nova playlist         |
+| PUT    | `/api/playlists/:id`     | Atualiza uma playlist          |
+| DELETE | `/api/playlists/:id`     | Remove uma playlist            |
 
-| Método | Rota                    | Descrição                           |
-|--------|------------------------|-------------------------------------|
-| GET    | `/api/playlists`       | Lista todas as playlists            |
-| GET    | `/api/playlists/search`| Busca playlists por nome/descrição  |
-| GET    | `/api/playlists/by-song`| Busca playlists por música         |
-| GET    | `/api/playlists/:id`   | Retorna uma playlist específica     |
-| POST   | `/api/playlists`       | Cria uma nova playlist              |
-| PUT    | `/api/playlists/:id`   | Atualiza uma playlist              |
-| DELETE | `/api/playlists/:id`   | Remove uma playlist                 |
-| POST   | `/api/playlists/:id/songs` | Adiciona músicas à playlist     |
-| DELETE | `/api/playlists/:id/songs` | Remove músicas da playlist      |
+### 🔍 Filtros de Playlists
+
+- **Por nome**: `/api/playlists?name=rock`
+- **Por música**: `/api/playlists?songId=123`
+- **Busca em nome/descrição**: `/api/playlists/search?query=festa`
+- **Busca por música**: `/api/playlists/by-song?song=shape`
 
 ### 🔍 Filtros Disponíveis
 
@@ -171,72 +135,62 @@ A API possui documentação interativa usando Swagger/OpenAPI. Para acessá-la:
 
 ---
 
-## ⚙️ O que é necessário para rodar em outra máquina
+## 🐳 Executando com Docker
 
-- Node.js instalado
-- PostgreSQL instalado e configurado
-- `.env` corretamente preenchido
-- Rodar `npm install`
-- Rodar as migrations com `npx prisma migrate dev`
-- Rodar o servidor com `npm start` ou `node src/index.js`
+### Pré-requisitos
 
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-// Continuar documentação.... //
---------------------------
+### Passos
 
+1. Clone e navegue até o projeto:
+```bash
+git clone https://github.com/janamachado/streaming-app.git
+cd streaming-app/backend
+```
 
-Roteiro de Execução
+2. Configure o arquivo `.env`:
+```bash
+cp .env.example .env
+```
 
-Criar estrutura de pastas ok
+3. Inicie os containers:
+```bash
+docker-compose up -d
+```
 
-Criar documento técnico com plano de execução ok
+4. Execute as migrations:
+```bash
+docker-compose exec app npx prisma migrate dev
+```
 
-Criar JSON fictício com dados (melhorar mock)
+> O servidor estará disponível em `http://localhost:3000`
 
-Definir modelo relacional no banco (artistas, álbuns, músicas)
+### Comandos Úteis
 
-Definir/instalar dependências mínimas para o projeto
+```bash
+# Ver logs
+docker-compose logs -f
 
-Etapa 2: Back-end – Node.js + Express + PostgreSQL
+# Acessar shell do container
+docker-compose exec app sh
 
-Configurar ambiente local (env, scripts)
+# Executar seed
+docker-compose exec app npx prisma db seed
 
-Desenvolver CRUD
-Criar rotas REST:
-
-    POST, GET, PUT, DELETE /songs
-
-    GET /songs/:id
-
-    POST, GET, PUT, DELETE /playlists
-
-    GET /playlists/:id
-
-Deixar rotas funcionando ok
-
-Conectar ao PostgreSQL via prisma ok
-Criar JSON de dados (SONGS) songs e playlists
-Criar migrations para tabelasok
-Sistema de seeding dos dados no DB
-
-
-Validação das rotas
-Validação erros
+# Parar os containers
+docker-compose down
+```
 
 
-
-
-
-
+Meu checklist
 
 Criar serviço externo opcional (Deezer API mais simples)
 
     Separar em services/ e isolar a lógica de requisição
 
     Cobertura mínima de testes unit e integração
--------------------------------------------------------------------------
-DEPOIS
-
 ✅ Etapa 3: Front-end – React 
 
 Criar layout funcional responsivo (pode usar Tailwind ou Bootstrap)
