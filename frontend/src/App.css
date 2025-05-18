@@ -87,8 +87,47 @@ body {
 }
 
 .form-control:focus {
-  background-color: var(--bs-dark) !important;
-  border-color: var(--bs-primary) !important;
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+  background-color: var(--bg-primary) !important;
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25) !important;
 }
 
+/* Estilos do Modal */
+.dark-modal .modal-content {
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius);
+}
+
+.dark-modal .modal-header {
+  border-bottom: 1px solid var(--bg-primary);
+}
+
+.dark-modal .modal-footer {
+  border-top: 1px solid var(--bg-primary);
+}
+
+.dark-modal .list-group-item {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--bg-primary);
+  margin-bottom: 0.5rem;
+  border-radius: var(--border-radius);
+  transition: var(--transition-base);
+}
+
+.dark-modal .list-group-item:hover {
+  background-color: var(--bg-primary);
+  transform: translateY(-2px);
+  cursor: pointer;
+}
+
+.dark-modal .list-group-item.selected-playlist {
+  background-color: var(--accent-primary) !important;
+  border-color: var(--accent-primary) !important;
+  color: white !important;
+}
+
+.dark-modal .list-group-item.selected-playlist:hover {
+  background-color: var(--accent-hover) !important;
+  border-color: var(--accent-hover) !important;
+}

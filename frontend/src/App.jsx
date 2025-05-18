@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
 import CreatePlaylistModal from './components/CreatePlaylistModal';
+import AddToPlaylistModal from './components/AddToPlaylistModal';
 import PlaylistCard from './components/PlaylistCard';
 import MusicItem from './components/MusicItem';
-
 import SongSearch from './components/SongSearch';
 import PlaylistSearch from './components/PlaylistSearch';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,6 +15,7 @@ function App() {
   const [filteredSongs, setFilteredSongs] = useState([]);
   const [playlists, setPlaylists] = useState([]);
   const [selectedSong, setSelectedSong] = useState(null);
+  const [showAddToPlaylistModal, setShowAddToPlaylistModal] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -122,15 +123,27 @@ function App() {
     }
   };
 
-  const handleAddToPlaylist = async (playlistId, songId) => {
+  const handleAddToPlaylist = async (playlistIds) => {
+    if (!selectedSong || !playlistIds?.length) return;
+    
     try {
-      await axios.post(`${API_BASE_URL}/playlists/${playlistId}/songs`, { songId });
+      // Adiciona a música a cada playlist sequencialmente
+      for (const playlistId of playlistIds) {
+        const numericPlaylistId = parseInt(playlistId);
+        if (isNaN(numericPlaylistId)) continue; // Pula se não for um número válido
+
+        await axios.post(`${API_BASE_URL}/playlists/${numericPlaylistId}/songs`, { 
+          songIds: [parseInt(selectedSong.id)] // Convertendo para número
+        });
+      }
+      
+      setShowAddToPlaylistModal(false);
       const updatedPlaylists = await fetchPlaylists();
       setPlaylists(updatedPlaylists);
       setFilteredPlaylists(updatedPlaylists);
       setSelectedSong(null);
     } catch (error) {
-      handleApiError(error, "Não foi possível adicionar a música. Por favor, tente novamente.");
+      handleApiError(error, "Não foi possível adicionar a música a todas as playlists. Por favor, tente novamente.");
     }
   };
 
@@ -211,9 +224,12 @@ function App() {
                   <div className="songs-list">
                     {(filteredSongs || songs).map((song) => (
                       <MusicItem
-                        key={song.id}
+                        key={song._id}
                         song={song}
-                        onAddToPlaylist={(song) => setSelectedSong(song)}
+                        onAddToPlaylist={() => {
+                          setSelectedSong(song);
+                          setShowAddToPlaylistModal(true);
+                        }}
                       />
                     ))}
                   </div>
@@ -284,9 +300,20 @@ function App() {
       </Container>
 
       <CreatePlaylistModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleCreatePlaylist}
+        show={isModalOpen}
+        onHide={() => setIsModalOpen(false)}
+        onCreatePlaylist={handleCreatePlaylist}
+      />
+
+      <AddToPlaylistModal
+        show={showAddToPlaylistModal}
+        onHide={() => {
+          setShowAddToPlaylistModal(false);
+          setSelectedSong(null);
+        }}
+        playlists={playlists}
+        selectedSong={selectedSong}
+        onSelectPlaylist={handleAddToPlaylist}
       />
 
       {/* Song selection modal */}
