@@ -25,8 +25,6 @@ function App() {
   const [toast, setToast] = useState({ show: false, message: '', variant: 'danger' });
   const [loading, setLoading] = useState(true);
   const [filteredPlaylists, setFilteredPlaylists] = useState([]);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [playlistToDelete, setPlaylistToDelete] = useState(null);
   // Constants
   const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -163,17 +161,7 @@ function App() {
     }
   };
 
-  const confirmDeletePlaylist = (playlistId) => {
-    const playlist = playlists.find(p => p.id === playlistId);
-    if (playlist) {
-      setPlaylistToDelete(playlist);
-      setShowDeleteModal(true);
-    }
-  };
-
-  const handleDeletePlaylist = async () => {
-    if (!playlistToDelete) return;
-
+  const handleDeletePlaylist = async (playlistId) => {
     try {
       await axios.delete(`${API_BASE_URL}/playlists/${playlistId}`);
       const updatedPlaylists = playlists.filter(p => p.id !== playlistId);
@@ -342,20 +330,18 @@ function App() {
           {/* Main Content - Playlists */}
           <Col md={8} lg={9}>
             <div className="playlists-section shadow-sm">
-              <div className="playlists-container">
-                <div className="playlists-header">
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h2 className="h4 mb-0">Minhas Playlists</h2>
-                    <Button
-                      variant="primary"
-                      onClick={() => setIsModalOpen(true)}
-                      className="rounded-pill px-3"
-                    >
-                      <span className="me-2">Nova Playlist</span>
-                      <i className="bi bi-plus-circle"></i>
-                    </Button>
-                  </div>
-                  <PlaylistSearch onSearch={handlePlaylistSearch} />
+              <div className="playlists-header">
+                <div className="d-flex align-items-center justify-content-between mb-3">
+                  <h2 className="fs-4 fw-bold mb-0">Minhas Playlists</h2>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => setIsModalOpen(true)}
+                    className="rounded-pill px-3"
+                  >
+                    <span className="me-2">Nova Playlist</span>
+                    <i className="bi bi-plus-circle"></i>
+                  </Button>
                 </div>
                 <PlaylistSearch onSearch={handlePlaylistSearch} />
               </div>
@@ -395,20 +381,9 @@ function App() {
                           onEditPlaylist={handleEditPlaylist}
                         />
                       </Col>
-                    ) : (
-                      filteredPlaylists.map((playlist) => (
-                        <Col key={playlist.id} xs={12} md={6} xl={4}>
-                          <PlaylistCard
-                            playlist={playlist}
-                            onDeletePlaylist={confirmDeletePlaylist}
-                            onRemoveSong={handleRemoveSong}
-                            onEditPlaylist={handleEditPlaylist}
-                          />
-                        </Col>
-                      ))
-                    )}
-                  </Row>
-                </div>
+                    ))
+                  )}
+                </Row>
               </div>
             </div>
           </Col>
@@ -438,6 +413,7 @@ function App() {
         onSave={handleSavePlaylist}
         playlist={selectedPlaylist}
       />
+
       <DeletePlaylistModal
         show={showDeleteModal}
         onHide={() => {

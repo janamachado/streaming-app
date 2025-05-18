@@ -46,10 +46,10 @@ const CreatePlaylistModal = ({ isOpen, onClose, onSubmit }) => {
               placeholder="Nome da playlist"
               className="bg-dark text-light border-secondary"
               required
-              maxLength={25}
+              maxLength={50}
             />
             <Form.Text className="text-secondary">
-              {formData.name.length}/25 caracteres
+              {formData.name.length}/50 caracteres
             </Form.Text>
           </Form.Group>
 
