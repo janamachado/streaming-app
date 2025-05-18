@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Card, Button, Badge, ListGroup } from 'react-bootstrap';
+import { Card, Button, Badge, ListGroup, Form } from 'react-bootstrap';
 
 const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedSongs, setSelectedSongs] = useState([]);
   
   // Garantir que playlist.songs existe
   const songs = playlist.songs || [];
@@ -22,6 +23,20 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist
           </Badge>
         </div>
         <div className="d-flex gap-2">
+          {selectedSongs.length > 0 && (
+            <Button
+              variant="outline-danger"
+              size="sm"
+              onClick={() => {
+                onRemoveSong(playlist.id, selectedSongs);
+                setSelectedSongs([]);
+              }}
+              title="Remover da playlist"
+            >
+              <i className="bi bi-trash"></i>
+              <span className="ms-1">{selectedSongs.length}</span>
+            </Button>
+          )}
           <Button
             variant="outline-light"
             size="sm"
@@ -59,22 +74,27 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist
           {isExpanded && (
             songs.length > 0 ? (
               songs.map((song) => (
-                <ListGroup.Item 
-                  key={song.id} 
-                  className="bg-dark border-secondary d-flex justify-content-between align-items-center py-3"
+                <ListGroup.Item
+                  key={song.id}
+                  className="bg-dark text-light border-secondary d-flex justify-content-between align-items-center"
                 >
-                  <div className="text-truncate">
-                    <p className="text-light mb-1 text-truncate">{song.title}</p>
-                    <small className="text-secondary text-truncate">{song.artist}</small>
+                  <div className="d-flex align-items-center gap-2" style={{ maxWidth: '100%' }}>
+                    <Form.Check
+                      type="checkbox"
+                      checked={selectedSongs.includes(song.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedSongs([...selectedSongs, song.id]);
+                        } else {
+                          setSelectedSongs(selectedSongs.filter(id => id !== song.id));
+                        }
+                      }}
+                    />
+                    <div className="text-truncate">
+                      <p className="mb-0 text-truncate" title={song.title}>{song.title}</p>
+                      <small className="text-secondary text-truncate" title={song.artist}>{song.artist}</small>
+                    </div>
                   </div>
-                  <Button
-                    variant="link"
-                    className="text-danger p-0 ms-2"
-                    onClick={() => onRemoveSong(playlist.id, song.id)}
-                    title="Remover da playlist"
-                  >
-                    <i className="bi bi-x-circle"></i>
-                  </Button>
                 </ListGroup.Item>
               ))
             ) : (
