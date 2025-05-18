@@ -222,10 +222,23 @@ class PlaylistService {
   }
 
   async delete(id) {
-    const playlist = await prisma.playlist.findUnique({ where: { id } });
+    const playlist = await prisma.playlist.findUnique({ 
+      where: { id },
+      include: {
+        playlistSongs: true
+      }
+    });
+
     if (!playlist) {
       throw { type: 'NotFoundError', message: 'Playlist not found' };
     }
+
+    // Primeiro remove todas as músicas da playlist
+    await prisma.playlistSong.deleteMany({
+      where: { playlistId: id }
+    });
+
+    // Depois remove a playlist
     await prisma.playlist.delete({ where: { id } });
   }
 
