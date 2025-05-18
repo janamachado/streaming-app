@@ -24,37 +24,50 @@ const AddToPlaylistModal = ({ show, onHide, playlists, onSelectPlaylist, selecte
     onHide();
   };
   return (
-    <Modal show={show} onHide={handleClose} centered className="dark-modal">
+    <Modal show={show} onHide={handleClose} centered className="dark-modal" dialogClassName="modal-fixed-height">
       <Modal.Header closeButton className="bg-dark text-light border-secondary">
         <Modal.Title>Adicionar música às playlists</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="bg-dark text-light">
+      <Modal.Body className="bg-dark text-light p-0" style={{ height: '60vh', display: 'flex', flexDirection: 'column' }}>
         {selectedSong && (
-          <p className="mb-3">
+          <div className="px-3 py-3 border-bottom border-secondary">
             <strong>Música: </strong>
             <span className="text-secondary">{selectedSong.title}</span>
-          </p>
+          </div>
         )}
-        <ListGroup variant="flush">
-          {playlists.map(playlist => (
-            <ListGroup.Item
-              key={playlist.id}
-              action
-              onClick={() => handlePlaylistToggle(playlist.id)}
-              className={`bg-dark text-light border-secondary interactive ${selectedPlaylists.includes(playlist.id) ? 'selected-playlist' : ''}`}
-            >
-              {playlist.name}
-              <small className="text-secondary d-block">
-                {playlist.songs.length} música{playlist.songs.length !== 1 ? 's' : ''}
-              </small>
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-        {playlists.length === 0 && (
-          <p className="text-center text-secondary">
-            Nenhuma playlist encontrada. Crie uma nova playlist primeiro.
-          </p>
-        )}
+        <div style={{ flex: 1, overflowY: 'auto' }}>
+          <ListGroup variant="flush">
+            {playlists.map(playlist => (
+              <ListGroup.Item
+                key={playlist.id}
+                className="bg-dark text-light border-secondary"
+              >
+                <div className="px-3 py-2 d-flex align-items-center">
+                  <Form.Check
+                    type="checkbox"
+                    id={`playlist-${playlist.id}`}
+                    checked={selectedPlaylists.includes(playlist.id)}
+                    onChange={() => handlePlaylistToggle(playlist.id)}
+                    label={
+                      <div className="ms-2">
+                        <div>{playlist.name}</div>
+                        <small className="text-secondary">
+                          {playlist.songs.length} música{playlist.songs.length !== 1 ? 's' : ''}
+                        </small>
+                      </div>
+                    }
+                    className="text-light m-0"
+                  />
+                </div>
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+          {playlists.length === 0 && (
+            <div className="p-3 text-center text-secondary">
+              Nenhuma playlist encontrada. Crie uma nova playlist primeiro.
+            </div>
+          )}
+        </div>
       </Modal.Body>
       <Modal.Footer className="bg-dark border-secondary d-flex justify-content-between">
         <span className="text-secondary">
