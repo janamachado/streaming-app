@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
 import CreatePlaylistModal from './components/CreatePlaylistModal';
 import AddToPlaylistModal from './components/AddToPlaylistModal';
+import EditPlaylistModal from './components/EditPlaylistModal';
 import PlaylistCard from './components/PlaylistCard';
 import MusicItem from './components/MusicItem';
 import SongSearch from './components/SongSearch';
@@ -17,6 +18,8 @@ function App() {
   const [selectedSong, setSelectedSong] = useState(null);
   const [showAddToPlaylistModal, setShowAddToPlaylistModal] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showEditPlaylistModal, setShowEditPlaylistModal] = useState(false);
+  const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filteredPlaylists, setFilteredPlaylists] = useState([]);
@@ -106,6 +109,27 @@ function App() {
       setIsModalOpen(false);
     } catch (error) {
       handleApiError(error, "Não foi possível criar a playlist. Por favor, tente novamente.");
+    }
+  };
+
+  const handleEditPlaylist = async (playlistId) => {
+    const playlist = playlists.find(p => p.id === playlistId);
+    if (playlist) {
+      setSelectedPlaylist(playlist);
+      setShowEditPlaylistModal(true);
+    }
+  };
+
+  const handleSavePlaylist = async (formData) => {
+    try {
+      await axios.put(`${API_BASE_URL}/playlists/${selectedPlaylist.id}`, formData);
+      const updatedPlaylists = await fetchPlaylists();
+      setPlaylists(updatedPlaylists);
+      setFilteredPlaylists(updatedPlaylists);
+      setShowEditPlaylistModal(false);
+      setSelectedPlaylist(null);
+    } catch (error) {
+      handleApiError(error, "Não foi possível atualizar a playlist. Por favor, tente novamente.");
     }
   };
 
@@ -291,6 +315,7 @@ function App() {
                           playlist={playlist}
                           onDeletePlaylist={handleDeletePlaylist}
                           onRemoveSong={handleRemoveSong}
+                          onEditPlaylist={handleEditPlaylist}
                         />
                       </Col>
                     ))
@@ -310,13 +335,20 @@ function App() {
 
       <AddToPlaylistModal
         show={showAddToPlaylistModal}
-        onHide={() => {
-          setShowAddToPlaylistModal(false);
-          setSelectedSong(null);
-        }}
+        onHide={() => setShowAddToPlaylistModal(false)}
         playlists={playlists}
-        selectedSong={selectedSong}
         onSelectPlaylist={handleAddToPlaylist}
+        selectedSong={selectedSong}
+      />
+
+      <EditPlaylistModal
+        show={showEditPlaylistModal}
+        onHide={() => {
+          setShowEditPlaylistModal(false);
+          setSelectedPlaylist(null);
+        }}
+        onSave={handleSavePlaylist}
+        playlist={selectedPlaylist}
       />
 
       {/* Song selection modal */}

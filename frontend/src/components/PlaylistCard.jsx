@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, Button, Badge, ListGroup } from 'react-bootstrap';
 
-const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong }) => {
+const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
   // Garantir que playlist.songs existe
@@ -9,10 +9,14 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong }) => {
 
   return (
     <Card className="h-100 bg-dark text-light border-0 shadow-sm">
-      <Card.Header className="d-flex justify-content-between align-items-center bg-dark-subtle border-0 py-3">
-        <div>
-          <h5 className="card-title mb-1 text-truncate">{playlist.name}</h5>
-          <p className="text-dark small">{playlist.description}</p>
+      <Card.Header className="d-flex justify-content-between align-items-start bg-dark-subtle border-0 py-3">
+        <div className="overflow-hidden" style={{ maxWidth: 'calc(100% - 120px)' }}>
+          <h5 className="card-title mb-1 text-truncate" title={playlist.name}>{playlist.name}</h5>
+          {playlist.description && (
+            <p className="text-secondary mb-2 small text-truncate" title={playlist.description}>
+              {playlist.description}
+            </p>
+          )}
           <Badge bg="secondary" className="text-white">
             {songs.length} {songs.length === 1 ? 'música' : 'músicas'}
           </Badge>
@@ -28,11 +32,22 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong }) => {
             <i className={`bi bi-chevron-${isExpanded ? 'up' : 'down'}`}></i>
           </Button>
           <Button
+            variant="outline-light"
+            size="sm"
+            onClick={() => onEditPlaylist(playlist.id)}
+            className="rounded-circle p-1 me-2"
+            style={{ width: '32px', height: '32px' }}
+            title="Editar playlist"
+          >
+            <i className="bi bi-pencil"></i>
+          </Button>
+          <Button
             variant="outline-danger"
             size="sm"
-            onClick={() => onDeletePlaylist(playlist._id)}
+            onClick={() => onDeletePlaylist(playlist.id)}
             className="rounded-circle p-1"
             style={{ width: '32px', height: '32px' }}
+            title="Excluir playlist"
           >
             <i className="bi bi-trash"></i>
           </Button>

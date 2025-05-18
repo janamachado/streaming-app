@@ -1,12 +1,25 @@
+import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 const CreatePlaylistModal = ({ isOpen, onClose, onSubmit }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    description: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const name = formData.get("name");
-    onSubmit(name);
-    e.target.reset();
+    onSubmit(formData.name);
+    setFormData({ name: '', description: '' });
+    onClose();
   };
 
   return (
@@ -28,9 +41,16 @@ const CreatePlaylistModal = ({ isOpen, onClose, onSubmit }) => {
             <Form.Control
               type="text"
               name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Nome da playlist"
+              className="bg-dark text-light border-secondary"
               required
-              className="bg-secondary bg-opacity-25 text-white border-secondary"
+              maxLength={50}
             />
+            <Form.Text className="text-secondary">
+              {formData.name.length}/50 caracteres
+            </Form.Text>
           </Form.Group>
 
           <div className="d-flex justify-content-end gap-2">
