@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Button, Toast, ToastContainer } from 'react-bootstrap';
 import CreatePlaylistModal from './components/CreatePlaylistModal';
 import AddToPlaylistModal from './components/AddToPlaylistModal';
 import EditPlaylistModal from './components/EditPlaylistModal';
+import DeletePlaylistModal from './components/DeletePlaylistModal';
 import PlaylistCard from './components/PlaylistCard';
 import MusicItem from './components/MusicItem';
 import SongSearch from './components/SongSearch';
@@ -20,37 +21,53 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showEditPlaylistModal, setShowEditPlaylistModal] = useState(false);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
-  const [error, setError] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: '', variant: 'danger' });
   const [loading, setLoading] = useState(true);
   const [filteredPlaylists, setFilteredPlaylists] = useState([]);
   // Constants
   const API_BASE_URL = 'http://localhost:3000/api';
 
-  // Utility functions
-  const formatPlaylistData = (playlist) => ({
-    ...playlist,
-    songs: playlist.playlistSongs
-      ? playlist.playlistSongs
-          .sort((a, b) => a.order - b.order)
-          .map(ps => ps.song)
-      : []
-  });
 
-  const handleApiError = (error, customMessage) => {
-    console.error(customMessage, error);
-    setError(customMessage);
+
+  const handleApiError = (error, defaultMessage) => {
+    const errorMessage = error.response?.data?.message || defaultMessage;
+    setToast({ show: true, message: errorMessage, variant: 'danger' });
   };
 
   // Data fetching
   const fetchSongs = async () => {
-    const response = await axios.get(`${API_BASE_URL}/song`);
-    const sortedSongs = response.data.sort((a, b) => sortSongs(a, b, 'title'));
-    return sortedSongs;
+    try {
+      const response = await axios.get(`${API_BASE_URL}/song`);
+      setSongs(response.data);
+      setFilteredSongs(response.data);
+    } catch (error) {
+      handleApiError(error, "Não foi possível carregar as músicas. Por favor, tente novamente.");
+      // Mantém os dados anteriores em caso de erro
+      if (!songs.length) {
+        setSongs([]);
+        setFilteredSongs([]);
+      }
+    }
   };
 
   const fetchPlaylists = async () => {
-    const response = await axios.get(`${API_BASE_URL}/playlists`);
-    return response.data.map(formatPlaylistData);
+    try {
+      const response = await axios.get(`${API_BASE_URL}/playlists`);
+      // Formata as playlists antes de retornar
+      return response.data.map(playlist => ({
+        ...playlist,
+        songs: playlist.playlistSongs
+          ? playlist.playlistSongs
+              .sort((a, b) => a.order - b.order)
+              .map(ps => ps.song)
+          : []
+      }));
+    } catch (error) {
+      handleApiError(error, "Não foi possível carregar as playlists. Por favor, tente novamente.");
+      // Em caso de erro, retorna as playlists atuais para manter o estado
+      return playlists;
+    }
   };
 
   const handlePlaylistSearch = ({ query, searchInSongs }) => {
@@ -84,8 +101,6 @@ function App() {
           fetchSongs(),
           fetchPlaylists()
         ]);
-        setSongs(songsData);
-        setFilteredSongs(songsData);
         setPlaylists(playlistsData);
         setFilteredPlaylists(playlistsData);
       } catch (err) {
@@ -100,12 +115,17 @@ function App() {
 
   // Handlers for playlist operations
   // Playlist operations
-  const handleCreatePlaylist = async (name) => {
+  const handleCreatePlaylist = async (data) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/playlists`, { name });
-      const newPlaylist = formatPlaylistData(response.data);
-      setPlaylists(prevPlaylists => [...prevPlaylists, newPlaylist]);
-      setFilteredPlaylists(prevPlaylists => [...prevPlaylists, newPlaylist]);
+      const response = await axios.post(`${API_BASE_URL}/playlists`, data);
+      // Formata a nova playlist antes de adicionar ao estado
+      const newPlaylist = {
+        ...response.data,
+        songs: []
+      };
+      const updatedPlaylists = [...playlists, newPlaylist];
+      setPlaylists(updatedPlaylists);
+      setFilteredPlaylists(updatedPlaylists);
       setIsModalOpen(false);
     } catch (error) {
       handleApiError(error, "Não foi possível criar a playlist. Por favor, tente novamente.");
@@ -122,28 +142,43 @@ function App() {
 
   const handleSavePlaylist = async (formData) => {
     try {
-      await axios.put(`${API_BASE_URL}/playlists/${selectedPlaylist.id}`, formData);
-      const updatedPlaylists = await fetchPlaylists();
+      const response = await axios.put(`${API_BASE_URL}/playlists/${selectedPlaylist.id}`, formData);
+      // Mantém as músicas da playlist ao atualizar
+      const currentPlaylist = playlists.find(p => p.id === selectedPlaylist.id);
+      const updatedPlaylist = {
+        ...response.data,
+        songs: currentPlaylist ? currentPlaylist.songs : []
+      };
+      const updatedPlaylists = playlists.map(p => 
+        p.id === selectedPlaylist.id ? updatedPlaylist : p
+      );
       setPlaylists(updatedPlaylists);
       setFilteredPlaylists(updatedPlaylists);
       setShowEditPlaylistModal(false);
       setSelectedPlaylist(null);
     } catch (error) {
-      handleApiError(error, "Não foi possível atualizar a playlist. Por favor, tente novamente.");
+      handleApiError(error, "Não foi possível editar a playlist. Por favor, tente novamente.");
     }
   };
 
   const handleDeletePlaylist = async (playlistId) => {
     try {
       await axios.delete(`${API_BASE_URL}/playlists/${playlistId}`);
-      setPlaylists(prevPlaylists => 
-        prevPlaylists.filter(playlist => playlist._id !== playlistId)
-      );
-      setFilteredPlaylists(prevPlaylists => 
-        prevPlaylists.filter(playlist => playlist._id !== playlistId)
-      );
+      const updatedPlaylists = playlists.filter(p => p.id !== playlistId);
+      setPlaylists(updatedPlaylists);
+      setFilteredPlaylists(updatedPlaylists);
+      setShowDeleteModal(false);
+      setSelectedPlaylist(null);
     } catch (error) {
-      handleApiError(error, "Não foi possível deletar a playlist. Por favor, tente novamente.");
+      handleApiError(error, "Não foi possível excluir a playlist. Por favor, tente novamente.");
+    }
+  };
+
+  const confirmDeletePlaylist = (playlistId) => {
+    const playlist = playlists.find(p => p.id === playlistId);
+    if (playlist) {
+      setSelectedPlaylist(playlist);
+      setShowDeleteModal(true);
     }
   };
 
@@ -171,16 +206,28 @@ function App() {
     }
   };
 
-  const handleRemoveSong = async (playlistId, songId) => {
+  const handleRemoveSong = async (playlistId, songIds) => {
     try {
       await axios.delete(`${API_BASE_URL}/playlists/${playlistId}/songs`, {
-        data: { songIds: [parseInt(songId)] }
+        data: { songIds: songIds.map(id => parseInt(id)) }
       });
-      const updatedPlaylists = await fetchPlaylists();
+      // Atualiza localmente a playlist
+      const updatedPlaylists = playlists.map(p => {
+        if (p.id === playlistId) {
+          return {
+            ...p,
+            songs: p.songs.filter(s => !songIds.includes(s.id))
+          };
+        }
+        return p;
+      });
       setPlaylists(updatedPlaylists);
       setFilteredPlaylists(updatedPlaylists);
     } catch (error) {
-      handleApiError(error, "Não foi possível remover a música da playlist. Por favor, tente novamente.");
+      const message = songIds.length > 1
+        ? "Não foi possível remover as músicas da playlist. Por favor, tente novamente."
+        : "Não foi possível remover a música da playlist. Por favor, tente novamente.";
+      handleApiError(error, message);
     }
   };
 
@@ -189,27 +236,24 @@ function App() {
       const searchTerm = query.trim().toLowerCase();
       let filtered = [...songs];
 
-      // Filtra as músicas se houver termo de busca
-      if (searchTerm) {
-        filtered = songs.filter(song => {
-          if (type === 'all') {
-            return song.title.toLowerCase().includes(searchTerm) ||
-                   song.artist.toLowerCase().includes(searchTerm);
-          } else if (type === 'title') {
-            return song.title.toLowerCase().includes(searchTerm);
-          } else if (type === 'artist') {
-            return song.artist.toLowerCase().includes(searchTerm);
-          }
-          return true;
+      if (query) {
+        filtered = filtered.filter(song => {
+          const searchQuery = query.toLowerCase();
+          const matchTitle = song.title.toLowerCase().includes(searchQuery);
+          const matchArtist = song.artist.toLowerCase().includes(searchQuery);
+          return type === 'artist' ? matchArtist : type === 'title' ? matchTitle : (matchTitle || matchArtist);
         });
       }
 
-      // Ordena os resultados
-      filtered.sort((a, b) => sortSongs(a, b, sort));
+      if (sort) {
+        filtered.sort((a, b) => sortSongs(a, b, sort));
+      }
+
       setFilteredSongs(filtered);
-    } catch (error) {
-      console.error('Erro ao filtrar músicas:', error);
-      setError('Erro ao filtrar músicas. Por favor, tente novamente.');
+    } catch (err) {
+      handleApiError(err, 'Erro ao filtrar músicas');
+      // Mantém o estado anterior em caso de erro
+      setFilteredSongs(songs);
     }
   };
 
@@ -229,11 +273,28 @@ function App() {
 
   return (
     <div className="app-container">
-      <Container fluid className="h-100">
-        
-
-
-        <Row className="h-100 g-4">
+      <Container fluid className="py-4 bg-dark min-vh-100">
+      <ToastContainer 
+        className="p-3" 
+        position="top-end"
+        style={{ zIndex: 1000 }}
+      >
+        <Toast 
+          show={toast.show} 
+          onClose={() => setToast(prev => ({ ...prev, show: false }))} 
+          delay={5000} 
+          autohide
+          bg={toast.variant}
+        >
+          <Toast.Header closeButton>
+            <strong className="me-auto">Aviso</strong>
+          </Toast.Header>
+          <Toast.Body className={toast.variant === 'danger' ? 'text-white' : ''}>
+            {toast.message}
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
+      <Row className="h-100 g-4">
           {/* Left Sidebar - Songs */}
           <Col md={4} lg={3}>
             <div className="songs-section shadow-sm">
@@ -244,20 +305,22 @@ function App() {
               <div className="songs-list-container">
                 {loading ? (
                   <p className="text-center text-secondary">Carregando músicas...</p>
-                ) : error ? (
-                  <Alert variant="danger">{error}</Alert>
                 ) : (
                   <div className="songs-list">
-                    {(filteredSongs || songs).map((song) => (
-                      <MusicItem
-                        key={song._id}
-                        song={song}
-                        onAddToPlaylist={() => {
-                          setSelectedSong(song);
-                          setShowAddToPlaylistModal(true);
-                        }}
-                      />
-                    ))}
+                    {filteredSongs.length === 0 ? (
+                      <p className="text-center text-secondary">Nenhuma música encontrada</p>
+                    ) : (
+                      filteredSongs.map((song) => (
+                        <MusicItem
+                          key={song.id}
+                          song={song}
+                          onAddToPlaylist={() => {
+                            setSelectedSong(song);
+                            setShowAddToPlaylistModal(true);
+                          }}
+                        />
+                      ))
+                    )}
                   </div>
                 )}
               </div>
@@ -289,9 +352,9 @@ function App() {
                     <Col xs={12}>
                       <p className="text-center text-secondary">Carregando playlists...</p>
                     </Col>
-                  ) : error ? (
+                  ) : filteredPlaylists.length === 0 ? (
                     <Col xs={12}>
-                      <p className="text-center text-danger">{error}</p>
+                      <p className="text-center text-secondary">Nenhuma playlist encontrada</p>
                     </Col>
                   ) : playlists.length === 0 ? (
                     <Col xs={12}>
@@ -313,7 +376,7 @@ function App() {
                         <PlaylistCard
                           key={playlist.id}
                           playlist={playlist}
-                          onDeletePlaylist={handleDeletePlaylist}
+                          onDeletePlaylist={confirmDeletePlaylist}
                           onRemoveSong={handleRemoveSong}
                           onEditPlaylist={handleEditPlaylist}
                         />
@@ -348,6 +411,16 @@ function App() {
           setSelectedPlaylist(null);
         }}
         onSave={handleSavePlaylist}
+        playlist={selectedPlaylist}
+      />
+
+      <DeletePlaylistModal
+        show={showDeleteModal}
+        onHide={() => {
+          setShowDeleteModal(false);
+          setSelectedPlaylist(null);
+        }}
+        onConfirm={handleDeletePlaylist}
         playlist={selectedPlaylist}
       />
 
