@@ -149,12 +149,14 @@ function App() {
 
   const handleRemoveSong = async (playlistId, songId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/playlists/${playlistId}/songs/${songId}`);
+      await axios.delete(`${API_BASE_URL}/playlists/${playlistId}/songs`, {
+        data: { songIds: [parseInt(songId)] }
+      });
       const updatedPlaylists = await fetchPlaylists();
       setPlaylists(updatedPlaylists);
       setFilteredPlaylists(updatedPlaylists);
     } catch (error) {
-      handleApiError(error, "Não foi possível remover a música. Por favor, tente novamente.");
+      handleApiError(error, "Não foi possível remover a música da playlist. Por favor, tente novamente.");
     }
   };
 
@@ -285,9 +287,10 @@ function App() {
                     (filteredPlaylists).map((playlist) => (
                       <Col key={playlist._id} xs={12} md={6} xl={4}>
                         <PlaylistCard
+                          key={playlist.id}
                           playlist={playlist}
-                          onRemoveSong={handleRemoveSong}
                           onDeletePlaylist={handleDeletePlaylist}
+                          onRemoveSong={handleRemoveSong}
                         />
                       </Col>
                     ))
