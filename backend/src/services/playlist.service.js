@@ -273,9 +273,12 @@ class PlaylistService {
         skipDuplicates: true
       });
 
-      // Retorna a playlist atualizada
-      return await prisma.playlist.findUnique({
+      // Atualiza o updatedAt da playlist e retorna ela atualizada
+      return await prisma.playlist.update({
         where: { id: playlistId },
+        data: {
+          updatedAt: new Date()
+        },
         include: {
           playlistSongs: {
             include: {
@@ -317,9 +320,12 @@ class PlaylistService {
         }
       });
 
-      // Retorna a playlist atualizada
-      return await prisma.playlist.findUnique({
+      // Atualiza o updatedAt da playlist e retorna ela atualizada
+      return await prisma.playlist.update({
         where: { id: playlistId },
+        data: {
+          updatedAt: new Date()
+        },
         include: {
           playlistSongs: {
             include: {

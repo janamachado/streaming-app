@@ -308,7 +308,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <Container className="py-2">
+      <Container fluid className="py-2 px-4">
         <Row>
           <Col xs={12} lg={4}>
             <div className="bg-dark rounded-3 p-3 mb-3 mb-lg-0 sticky-top" style={{ top: '0.5rem', height: 'calc(100vh - 1rem)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
@@ -318,7 +318,7 @@ function App() {
               <div className="mb-3">
                 <SongSearch onSearch={handleSongSearch} />
               </div>
-              <div className="pt-2" style={{ overflowY: 'auto', flex: 1 }}>
+              <div className="pt-2 pe-2" style={{ overflowY: 'auto', flex: 1 }}>
                 {filteredSongs.map((song) => (
                   <MusicItem
                     key={song.id}
@@ -380,7 +380,9 @@ function App() {
                       </div>
                     </Col>
                   ) : (
-                    filteredPlaylists.map((playlist) => (
+                    filteredPlaylists
+                      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+                      .map((playlist) => (
                       <Col key={playlist.id} xs={12} md={6} xl={4}>
                         <PlaylistCard
                           playlist={playlist}

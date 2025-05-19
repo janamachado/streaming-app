@@ -83,6 +83,7 @@ const AddToPlaylistModal = ({ show, onHide, playlists, onSelectPlaylist, selecte
           <ListGroup variant="flush">
             {playlists
               .filter(playlist => playlist.name.toLowerCase().includes(searchTerm.toLowerCase()))
+              .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
               .map(playlist => (
               <ListGroup.Item
                 key={playlist.id}
