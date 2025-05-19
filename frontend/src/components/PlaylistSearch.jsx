@@ -1,7 +1,7 @@
-import { Form } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import SimpleSearchBar from './SimpleSearchBar';
 
-function PlaylistSearch({ onSearch }) {
+function PlaylistSearch({ onSearch, onCreatePlaylist }) {
   const handleSearch = (query) => {
     onSearch({
       query,
@@ -12,7 +12,7 @@ function PlaylistSearch({ onSearch }) {
   return (
     <div>
       <SimpleSearchBar onSearch={handleSearch} placeholder="Buscar playlist" />
-      <Form.Group className="mt-2 mb-0">
+      <div className="mt-2 d-flex justify-content-between align-items-center">
         <Form.Check
           type="checkbox"
           id="searchInSongs"
@@ -20,7 +20,15 @@ function PlaylistSearch({ onSearch }) {
           onChange={(e) => handleSearch(document.querySelector('input[type="search"]').value)}
           className="text-secondary"
         />
-      </Form.Group>
+        <Button
+          variant="primary"
+          onClick={onCreatePlaylist}
+          className="rounded-pill px-3"
+        >
+          <i className="bi bi-plus-lg me-2"></i>
+          Nova Playlist
+        </Button>
+      </div>
     </div>
   );
 }

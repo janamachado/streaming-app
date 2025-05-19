@@ -297,10 +297,10 @@ function App() {
         <Row>
           <Col xs={12} lg={4}>
             <div className="bg-dark rounded-3 p-3 mb-3 mb-lg-0 sticky-top" style={{ top: '0.5rem', height: 'calc(100vh - 1rem)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-              <div className="d-flex justify-content-between align-items-center">
+              <div className="d-flex justify-content-between align-items-center mb-2">
                 <h2 className="h4 mb-0 text-light">Músicas</h2>
               </div>
-              <div className="mt-2">
+              <div className="mb-3">
                 <SongSearch onSearch={handleSongSearch} />
               </div>
               <div className="pt-2 pe-2" style={{ overflowY: 'auto', flex: 1 }}>
@@ -319,7 +319,7 @@ function App() {
           </Col>
           <Col xs={12} lg={8}>
             <div className="bg-dark rounded-3 p-3" style={{ height: 'calc(100vh - 1rem)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-              <div className="d-flex justify-content-between align-items-center">
+              <div className="mb-2">
                 <div className="d-flex align-items-center gap-2">
                   <h2 className="h4 mb-0 text-light">Minhas Playlists</h2>
                   <span className="text-secondary">•</span>
@@ -327,18 +327,13 @@ function App() {
                     {playlists.length} playlist{playlists.length !== 1 ? 's' : ''}
                   </span>
                 </div>
-                <Button
-                  variant="primary"
-                  onClick={() => setIsModalOpen(true)}
-                  className="rounded-pill px-3"
-                >
-                  <i className="bi bi-plus-lg me-2"></i>
-                  Nova Playlist
-                </Button>
               </div>
 
-              <div className="mt-2">
-                <PlaylistSearch onSearch={handlePlaylistSearch} />
+              <div className="mb-3">
+                <PlaylistSearch 
+                  onSearch={handlePlaylistSearch}
+                  onCreatePlaylist={() => setIsModalOpen(true)}
+                />
               </div>
 
               <div style={{ overflowY: 'auto', flex: 1, overflowX: 'hidden' }}>
