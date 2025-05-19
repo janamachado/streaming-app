@@ -74,7 +74,7 @@ const PlaylistDetailsModal = ({
                   />
                   <div className="me-3 rounded overflow-hidden" style={{ width: '48px', height: '48px', flexShrink: 0 }}>
                     <img 
-                      src={ps.song.url} 
+                      src={ps.song.cover} 
                       alt={`${ps.song.album || ps.song.title} cover`}
                       className="w-100 h-100 object-fit-cover"
                       onError={(e) => {

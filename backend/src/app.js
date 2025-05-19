@@ -6,6 +6,7 @@ const swaggerSpec = require('./docs/swagger');
 
 const songRoutes = require('./routes/song.routes');
 const playlistRoutes = require('./routes/playlist.routes');
+const deezerRoutes = require('./routes/deezer.routes');
 const errorHandler = require('./middlewares/errorHandler');
 const { httpLogger, successLogger, errorLogger } = require('./middlewares/loggerMiddleware');
 const logger = require('./config/logger');
@@ -32,6 +33,7 @@ app.get('/swagger.json', (req, res) => {
 // Routes
 app.use('/api/song', songRoutes);
 app.use('/api/playlists', playlistRoutes);
+app.use('/api/deezer', deezerRoutes);
 
 // Error handling
 app.use(errorLogger);

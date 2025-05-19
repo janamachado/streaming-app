@@ -41,7 +41,7 @@ function App() {
   // Data fetching
   const fetchSongs = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/song`);
+      const response = await axios.get(`${API_BASE_URL}/deezer/top`);
       setSongs(response.data);
       setFilteredSongs(response.data);
     } catch (error) {
@@ -127,7 +127,7 @@ function App() {
       // Se tem música para adicionar, adiciona
       if (songToAdd) {
         await axios.post(`${API_BASE_URL}/playlists/${newPlaylistId}/songs`, { 
-          songIds: [parseInt(songToAdd.id)]
+          songIds: [parseInt(songToAdd.externalId.split(':')[1])]
         });
       }
 
@@ -218,17 +218,15 @@ function App() {
     if (!selectedSong || !playlistIds?.length) return;
     
     try {
+      // Extrai o número do ID do Deezer (formato: "deezer:3076071401")
+      const deezerId = parseInt(selectedSong.externalId.split(':')[1]);
+      if (isNaN(deezerId)) {
+        throw new Error('ID da música inválido');
+      }
+
       for (const playlistId of playlistIds) {
-        const numericPlaylistId = parseInt(playlistId);
-        if (isNaN(numericPlaylistId)) continue; 
-
-        // Pegar o número atual de músicas na playlist
-        const playlistResponse = await axios.get(`${API_BASE_URL}/playlists/${numericPlaylistId}`);
-        const currentOrder = playlistResponse.data.playlistSongs?.length || 0;
-
-        await axios.post(`${API_BASE_URL}/playlists/${numericPlaylistId}/songs`, { 
-          songIds: [parseInt(selectedSong.id)],
-          order: currentOrder // Adiciona a música como última da playlist
+        await axios.post(`${API_BASE_URL}/playlists/${playlistId}/songs`, { 
+          songIds: [deezerId]
         });
       }
       
@@ -268,41 +266,28 @@ function App() {
     }
   };
 
-  const handleSongSearch = ({ query, type, sort }) => {
+  const handleSongSearch = async ({ query }) => {
     try {
-      const searchTerm = query.trim().toLowerCase();
-      let filtered = [...songs];
-
-      if (query) {
-        filtered = filtered.filter(song => {
-          const searchQuery = query.toLowerCase();
-          const matchTitle = song.title.toLowerCase().includes(searchQuery);
-          const matchArtist = song.artist.toLowerCase().includes(searchQuery);
-          return type === 'artist' ? matchArtist : type === 'title' ? matchTitle : (matchTitle || matchArtist);
-        });
+      const searchTerm = query.trim();
+      if (!searchTerm) {
+        // Se não houver termo de busca, carrega as top músicas
+        const response = await axios.get(`${API_BASE_URL}/deezer/top`);
+        setSongs(response.data);
+        setFilteredSongs(response.data);
+        return;
       }
 
-      if (sort) {
-        filtered.sort((a, b) => sortSongs(a, b, sort));
-      }
-
-      setFilteredSongs(filtered);
+      // Busca músicas usando a rota de busca do backend
+      const response = await axios.get(`${API_BASE_URL}/deezer/search`, {
+        params: {
+          query: searchTerm
+        }
+      });
+      
+      setSongs(response.data);
+      setFilteredSongs(response.data);
     } catch (err) {
-      handleApiError(err, 'Erro ao filtrar músicas');
-      setFilteredSongs(songs);
-    }
-  };
-
-  const sortSongs = (a, b, sortBy) => {
-    switch (sortBy) {
-      case 'title':
-        return a.title.localeCompare(b.title);
-      case 'artist':
-        return a.artist.localeCompare(b.artist);
-      case 'duration':
-        return a.duration - b.duration;
-      default:
-        return 0;
+      handleApiError(err, 'Erro ao buscar músicas');
     }
   };
 
@@ -334,25 +319,21 @@ function App() {
           </Col>
           <Col xs={12} lg={8}>
             <div className="bg-dark rounded-3 p-3" style={{ height: 'calc(100vh - 1rem)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-              <div className="d-flex justify-content-between align-items-center mb-2">
-                <div>
-                  <h2 className="h4 mb-1 text-light">Minhas Playlists</h2>
-                  <p className="text-secondary mb-0">
+              <div className="mb-2">
+                <div className="d-flex align-items-center gap-2">
+                  <h2 className="h4 mb-0 text-light">Minhas Playlists</h2>
+                  <span className="text-secondary">•</span>
+                  <span className="text-secondary">
                     {playlists.length} playlist{playlists.length !== 1 ? 's' : ''}
-                  </p>
+                  </span>
                 </div>
-                <Button
-                  variant="primary"
-                  onClick={() => setIsModalOpen(true)}
-                  className="rounded-pill px-3"
-                >
-                  <i className="bi bi-plus-lg me-2"></i>
-                  Nova Playlist
-                </Button>
               </div>
 
               <div className="mb-3">
-                <PlaylistSearch onSearch={handlePlaylistSearch} />
+                <PlaylistSearch 
+                  onSearch={handlePlaylistSearch}
+                  onCreatePlaylist={() => setIsModalOpen(true)}
+                />
               </div>
 
               <div style={{ overflowY: 'auto', flex: 1, overflowX: 'hidden' }}>
