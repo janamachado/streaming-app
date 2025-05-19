@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const { createPlaylistSchema, updatePlaylistSchema } = require('../schemas/playlist.schema');
 const { playlistSongsSchema } = require('../schemas/playlist-songs.schema');
+const deezerService = require('./deezer.service');
 const prisma = new PrismaClient();
 
 class PlaylistService {
@@ -251,24 +252,66 @@ class PlaylistService {
         throw { type: 'NotFoundError', message: 'Playlist não encontrada' };
       }
 
-      // Verifica se todas as músicas existem
-      const songs = await prisma.song.findMany({
+      // Verifica se as músicas já existem no banco
+      const existingSongs = await prisma.song.findMany({
         where: {
-          id: {
-            in: songIds
+          externalId: {
+            in: songIds.map(id => `deezer:${id}`)
           }
         }
       });
 
-      if (songs.length !== songIds.length) {
-        throw { type: 'ValidationError', message: 'Uma ou mais músicas não foram encontradas' };
+      // Mapeia os IDs externos para os IDs internos das músicas existentes
+      const existingSongMap = new Map(
+        existingSongs.map(song => [song.externalId, song.id])
+      );
+
+      // Filtra os IDs que não existem no banco
+      const newSongIds = songIds.filter(
+        id => !existingSongMap.has(`deezer:${id}`)
+      );
+
+      // Se houver novas músicas, busca os dados no Deezer e cria no banco
+      if (newSongIds.length > 0) {
+        // Busca os dados das músicas na API do Deezer
+        const deezerTracks = await deezerService.getTracksByIds(newSongIds);
+
+        // Cria as músicas no banco com os dados do Deezer
+        if (deezerTracks.length > 0) {
+          await prisma.song.createMany({
+            data: deezerTracks.map(track => ({
+              externalId: track.externalId,
+              title: track.title,
+              artist: track.artist,
+              album: track.album,
+              duration: track.duration,
+              url: track.url,
+              cover: track.cover
+            })),
+            skipDuplicates: true
+          });
+
+          // Busca os IDs internos das músicas recém criadas
+          const createdSongs = await prisma.song.findMany({
+            where: {
+              externalId: {
+                in: deezerTracks.map(track => track.externalId)
+              }
+            }
+          });
+
+          // Adiciona as novas músicas ao mapa
+          createdSongs.forEach(song => {
+            existingSongMap.set(song.externalId, song.id);
+          });
+        }
       }
 
-      // Adiciona as músicas à playlist
+      // Cria as relações entre playlist e músicas
       await prisma.playlistSong.createMany({
-        data: songIds.map(songId => ({
+        data: songIds.map(id => ({
           playlistId,
-          songId
+          songId: existingSongMap.get(`deezer:${id}`)
         })),
         skipDuplicates: true
       });
