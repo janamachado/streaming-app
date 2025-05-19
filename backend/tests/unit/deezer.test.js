@@ -1,9 +1,9 @@
 const request = require('supertest');
-const app = require('../src/app');
-const DeezerService = require('../src/services/deezer.service');
+const app = require('../../src/app');
+const DeezerService = require('../../src/services/deezer.service');
 
 // Mock do serviço Deezer
-jest.mock('../src/services/deezer.service');
+jest.mock('../../src/services/deezer.service');
 
 describe('Deezer Routes', () => {
   const mockTrack = {

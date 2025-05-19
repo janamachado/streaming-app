@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 class SongService {
   validateSong(data) {
-    const requiredFields = ['title', 'artist', 'duration', 'album'];
+    const requiredFields = ['title', 'externalId'];
     const missingFields = requiredFields.filter(field => !data[field]);
     
     if (missingFields.length > 0) {
@@ -12,7 +12,7 @@ class SongService {
       };
     }
 
-    if (typeof data.duration !== 'number' || data.duration <= 0) {
+    if (data.duration !== undefined && (typeof data.duration !== 'number' || data.duration <= 0)) {
       throw { 
         type: 'ValidationError', 
         message: 'A duração deve ser um número positivo em segundos'
@@ -22,13 +22,28 @@ class SongService {
 
   async create(data) {
     this.validateSong(data);
+
+    // Verificar se já existe uma música com o mesmo externalId
+    const existingSong = await prisma.song.findUnique({
+      where: { externalId: data.externalId }
+    });
+
+    if (existingSong) {
+      throw { 
+        type: 'ValidationError', 
+        message: 'Música já existe no banco de dados'
+      };
+    }
     
     const newSong = await prisma.song.create({
       data: {
+        externalId: data.externalId,
         title: data.title,
-        artist: data.artist,
-        duration: data.duration,
-        album: data.album
+        artist: data.artist || null,
+        duration: data.duration || null,
+        album: data.album || null,
+        url: data.url || null,
+        cover: data.cover || null
       }
     });
     return newSong;
@@ -41,7 +56,7 @@ class SongService {
   async findOne(id) {
     const song = await prisma.song.findUnique({ where: { id } });
     if (!song) {
-      throw { type: 'NotFoundError', message: 'Song not found' };
+      throw { type: 'NotFoundError', message: 'Música não encontrada' };
     }
     return song;
   }
@@ -52,7 +67,7 @@ class SongService {
     
     const song = await prisma.song.findUnique({ where: { id } });
     if (!song) {
-      throw { type: 'NotFoundError', message: 'Song not found' };
+      throw { type: 'NotFoundError', message: 'Música não encontrada' };
     }
 
     const updatedData = {
@@ -74,7 +89,7 @@ class SongService {
   async delete(id) {
     const song = await prisma.song.findUnique({ where: { id } });
     if (!song) {
-      throw { type: 'NotFoundError', message: 'Song not found' };
+      throw { type: 'NotFoundError', message: 'Música não encontrada' };
     }
     await prisma.song.delete({ where: { id } });
   }

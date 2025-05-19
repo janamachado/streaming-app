@@ -67,6 +67,80 @@ npx prisma db seed
 npx prisma studio
 ```
 
+## ⚙️ Testes
+
+O projeto possui testes unitários e de integração. Para executar os testes:
+
+```bash
+# Executar todos os testes
+npm test
+
+# Executar apenas testes unitários
+npm run test:unit
+
+# Executar apenas testes de integração
+npm run test:integration
+
+# Executar testes com cobertura
+npm run test:coverage
+```
+
+### Configuração do Ambiente de Testes
+
+#### Banco de Dados de Teste
+
+Os testes de integração necessitam de um banco de dados PostgreSQL dedicado para testes. Configure o arquivo `.env.test`:
+
+```env
+DATABASE_URL="postgresql://postgres:senha@localhost:5432/streaming_app_test?schema=public"
+```
+
+> ⚠️ Importante: O banco de dados de teste é limpo automaticamente antes de cada teste.
+
+### Estrutura de Testes
+
+#### Testes de Integração
+
+**Músicas (`/tests/integration/song.test.js`)**
+- POST /api/song
+  - Criação de música com campos obrigatórios
+  - Validação de músicas duplicadas
+  - Validação de dados obrigatórios
+- GET /api/song
+  - Listagem de músicas
+  - Retorno vazio quando não há músicas
+- GET /api/song/:id
+  - Busca de música específica
+  - Tratamento de música inexistente
+
+**Playlists (`/tests/integration/playlist.test.js`)**
+- POST /api/playlists
+  - Criação de playlist
+  - Validação de nomes duplicados
+  - Validação de dados
+- GET /api/playlists
+  - Listagem de playlists
+  - Retorno vazio quando não há playlists
+- GET /api/playlists/:id
+  - Busca de playlist específica
+  - Tratamento de playlist inexistente
+
+#### Testes Unitários
+
+**Músicas (`/tests/unit/song.test.js`)**
+- Validação de dados
+- Busca por ID
+- Listagem de músicas
+
+**Playlists (`/tests/unit/playlist.test.js`)**
+- Validação de dados
+- Busca por ID
+- Listagem de playlists
+
+**Deezer (`/tests/unit/deezer.test.js`)**
+- Busca de músicas na API externa
+- Tratamento de erros
+
 ### Modelos
 
 #### Song

@@ -1,9 +1,9 @@
 const request = require('supertest');
-const app = require('../src/app');
-const SongService = require('../src/services/song.service');
+const app = require('../../src/app');
+const SongService = require('../../src/services/song.service');
 
 // Mock do serviço de Song
-jest.mock('../src/services/song.service');
+jest.mock('../../src/services/song.service');
 
 describe('Song Routes', () => {
   const mockSong = {

@@ -1,5 +1,5 @@
 function errorHandler(err, req, res, next) {
-  console.error(err.message);
+  console.error(err.stack);
 
   if (err.type === 'NotFoundError') {
     return res.status(404).json({ message: err.message });
