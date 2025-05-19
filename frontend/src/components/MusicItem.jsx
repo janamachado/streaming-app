@@ -1,4 +1,5 @@
-import { Card } from 'react-bootstrap';
+import React from 'react';
+import { Card, Button } from 'react-bootstrap';
 
 const MusicItem = ({ song, onAddToPlaylist }) => {
   const formatDuration = (duration) => {
@@ -8,26 +9,43 @@ const MusicItem = ({ song, onAddToPlaylist }) => {
   };
 
   return (
-    <Card className="song-item bg-dark border-secondary mb-2">
-      <Card.Body className="p-2 d-flex justify-content-between align-items-center">
-        <div className="d-flex align-items-center flex-grow-1 min-width-0">
-          <div className="me-3 p-2 bg-secondary rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
-            <i className="bi bi-music-note text-dark fs-5"></i>
+    <Card className="song-item bg-dark border-secondary mb-2 me-2">
+      <Card.Body className="p-2 pe-3 d-flex align-items-center justify-content-between">
+        <div className="d-flex align-items-center" style={{ minWidth: 0, maxWidth: 'calc(100% - 130px)' }}>
+          <div className="me-3 rounded overflow-hidden" style={{ width: '40px', height: '40px', flexShrink: 0 }}>
+            <img 
+              src={song.url} 
+              alt={`${song.album} cover`}
+              className="w-100 h-100 object-fit-cover"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'https://placehold.co/40x40/6c757d/e9ecef?text=🎵';
+              }}
+            />
           </div>
-          <div className="flex-grow-1 min-width-0">
-            <h3 className="text-white fs-6 fw-medium text-truncate mb-1">{song.title}</h3>
-            <p className="text-secondary small text-truncate mb-0">{song.artist}</p>
+          <div style={{ minWidth: 0 }}>
+            <div className="fw-bold text-white text-truncate" title={song.title}>
+              {song.title.length > 20 ? `${song.title.substring(0, 20)}...` : song.title}
+            </div>
+            <div className="text-secondary text-truncate" title={`${song.artist}${song.album ? ` • ${song.album}` : ''}`}>
+              {song.artist}
+              {song.album && (
+                <span className="text-truncate"> • {song.album}</span>
+              )}
+            </div>
           </div>
         </div>
-        <div className="d-flex align-items-center gap-3 ms-3">
-          <span className="text-secondary small">{formatDuration(song.duration)}</span>
-          <button
+        <div className="d-flex align-items-center gap-3" style={{ width: '120px', justifyContent: 'flex-end' }}>
+          <span className="text-secondary small" style={{ width: '45px', textAlign: 'right' }}>{formatDuration(song.duration)}</span>
+          <Button
+            variant="outline-light"
+            size="sm"
             onClick={() => onAddToPlaylist(song)}
-            className="btn btn-outline-light btn-sm"
-            title="Adicionar à playlist"
+            className="rounded-circle"
+            style={{ width: '32px', height: '32px', padding: 0, flexShrink: 0 }}
           >
             <i className="bi bi-plus-lg"></i>
-          </button>
+          </Button>
         </div>
       </Card.Body>
     </Card>

@@ -221,8 +221,13 @@ function App() {
         const numericPlaylistId = parseInt(playlistId);
         if (isNaN(numericPlaylistId)) continue; 
 
+        // Pegar o número atual de músicas na playlist
+        const playlistResponse = await axios.get(`${API_BASE_URL}/playlists/${numericPlaylistId}`);
+        const currentOrder = playlistResponse.data.playlistSongs?.length || 0;
+
         await axios.post(`${API_BASE_URL}/playlists/${numericPlaylistId}/songs`, { 
-          songIds: [parseInt(selectedSong.id)] 
+          songIds: [parseInt(selectedSong.id)],
+          order: currentOrder // Adiciona a música como última da playlist
         });
       }
       
@@ -307,10 +312,10 @@ function App() {
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <h2 className="h4 mb-0 text-light">Músicas</h2>
               </div>
-              <div className="mb-2">
+              <div className="mb-3">
                 <SongSearch onSearch={handleSongSearch} />
               </div>
-              <div style={{ overflowY: 'auto', flex: 1 }}>
+              <div className="pt-2" style={{ overflowY: 'auto', flex: 1 }}>
                 {filteredSongs.map((song) => (
                   <MusicItem
                     key={song.id}
@@ -343,12 +348,12 @@ function App() {
                 </Button>
               </div>
 
-              <div className="mb-2">
+              <div className="mb-3">
                 <PlaylistSearch onSearch={handlePlaylistSearch} />
               </div>
 
               <div style={{ overflowY: 'auto', flex: 1, overflowX: 'hidden' }}>
-                <Row className="g-2 mx-0">
+                <Row className="g-2 mx-0 pt-2 pe-2">
                   {loading ? (
                     <Col xs={12}>
                       <div className="text-center py-5">
