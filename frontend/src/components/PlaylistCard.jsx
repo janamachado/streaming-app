@@ -35,10 +35,10 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist
           {songs.length > 0 ? (
             <>
               <div style={{ height: '160px', overflow: 'hidden' }}>
-                {songs[songs.length - 1].url ? (
+                {songs[songs.length - 1].cover ? (
                   <Card.Img 
                     variant="top" 
-                    src={songs[songs.length - 1].url} 
+                    src={songs[songs.length - 1].cover} 
                     alt=""
                     style={{ objectFit: 'cover', height: '100%', width: '100%' }}
                     onError={(e) => {

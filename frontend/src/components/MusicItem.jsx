@@ -14,7 +14,7 @@ const MusicItem = ({ song, onAddToPlaylist }) => {
         <div className="d-flex align-items-center" style={{ minWidth: 0, maxWidth: 'calc(100% - 130px)' }}>
           <div className="me-3 rounded overflow-hidden" style={{ width: '40px', height: '40px', flexShrink: 0 }}>
             <img 
-              src={song.url} 
+              src={song.cover} 
               alt={`${song.album} cover`}
               className="w-100 h-100 object-fit-cover"
               onError={(e) => {
