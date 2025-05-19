@@ -29,7 +29,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist
       <Card key={reloadKey} 
         className="mb-2 bg-dark text-light border-secondary interactive me-0" 
         onClick={() => setShowModal(true)}
-        style={{ width: '240px' }}
+        style={{ width: '290px' }}
       >
         <div className="position-relative">
           {songs.length > 0 ? (
@@ -63,7 +63,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist
                 >
                   <div className="d-flex justify-content-between align-items-start">
                     <div className="me-2">
-                      <h3 className="h6 mb-1 text-truncate" title={playlist.name}>
+                      <h3 className="h6 mb-1 text-truncate" style={{ fontSize: '0.9rem' }} title={playlist.name}>
                         {playlist.name.length > 25 ? `${playlist.name.substring(0, 25)}...` : playlist.name}
                       </h3>
                       <small className="text-secondary">
@@ -112,7 +112,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist
               >
                 <div className="d-flex justify-content-between align-items-start">
                   <div className="me-2">
-                    <h3 className="h6 mb-1 text-truncate" title={playlist.name}>
+                    <h3 className="h6 mb-1 text-truncate" style={{ fontSize: '0.9rem' }} title={playlist.name}>
                       {playlist.name.length > 25 ? `${playlist.name.substring(0, 25)}...` : playlist.name}
                     </h3>
                     <small className="text-secondary">
