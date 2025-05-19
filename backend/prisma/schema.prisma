@@ -25,15 +25,19 @@ model Playlist {
 
 model Song {
   id            Int            @id @default(autoincrement())
+  externalId    String         @unique // ID do Deezer
   title         String
   artist        String?
   album         String?
   duration      Int?           // duração em segundos
   url           String?
+  cover         String?        // URL da capa do álbum
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
   playlistSongs PlaylistSong[]
+
+  @@index([externalId])
 }
 
 model PlaylistSong {
