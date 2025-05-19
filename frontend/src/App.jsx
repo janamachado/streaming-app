@@ -380,7 +380,9 @@ function App() {
                       </div>
                     </Col>
                   ) : (
-                    filteredPlaylists.map((playlist) => (
+                    filteredPlaylists
+                      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+                      .map((playlist) => (
                       <Col key={playlist.id} xs={12} md={6} xl={4}>
                         <PlaylistCard
                           playlist={playlist}
