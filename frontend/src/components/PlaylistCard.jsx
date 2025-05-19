@@ -4,9 +4,8 @@ import { BiPencil, BiTrash, BiMusic } from 'react-icons/bi';
 import '../styles/PlaylistCard.css';
 import PlaylistDetailsModal from './PlaylistDetailsModal';
 
-const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist }) => {
+const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist, reloadKey }) => {
   const [showModal, setShowModal] = useState(false);
-  const [key, setKey] = useState(0); // Estado para forçar re-render
 
 
   const onEditClick = (id) => {
@@ -27,7 +26,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist
 
   return (
     <>
-      <Card key={key} 
+      <Card key={reloadKey} 
         className="mb-2 bg-dark text-light border-secondary interactive me-0" 
         onClick={() => setShowModal(true)}
         style={{ width: '240px' }}

@@ -19,6 +19,7 @@ function App() {
   const [selectedSong, setSelectedSong] = useState(null);
   const [selectedSongForNewPlaylist, setSelectedSongForNewPlaylist] = useState(null);
   const [showAddToPlaylistModal, setShowAddToPlaylistModal] = useState(false);
+  const [playlistReloadKey, setPlaylistReloadKey] = useState(0); // Controla reload das playlists
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showEditPlaylistModal, setShowEditPlaylistModal] = useState(false);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
@@ -236,6 +237,7 @@ function App() {
       setPlaylists(updatedPlaylists);
       setFilteredPlaylists(updatedPlaylists);
       setSelectedSong(null);
+      setPlaylistReloadKey(prev => prev + 1); // Força reload quando adiciona música
     } catch (error) {
       handleApiError(error, "Não foi possível adicionar a música a todas as playlists. Por favor, tente novamente.");
     }
@@ -257,6 +259,7 @@ function App() {
       });
       setPlaylists(updatedPlaylists);
       setFilteredPlaylists(updatedPlaylists);
+      setPlaylistReloadKey(prev => prev + 1); // Força reload quando remove música
     } catch (error) {
       const message = songIds.length > 1
         ? "Não foi possível remover as músicas da playlist. Por favor, tente novamente."
@@ -384,6 +387,7 @@ function App() {
                           onDeletePlaylist={confirmDeletePlaylist}
                           onRemoveSong={handleRemoveSong}
                           onEditPlaylist={handleEditPlaylist}
+                          reloadKey={playlistReloadKey}
                         />
                       </Col>
                     ))
