@@ -17,6 +17,7 @@ function App() {
   const [filteredSongs, setFilteredSongs] = useState([]);
   const [playlists, setPlaylists] = useState([]);
   const [selectedSong, setSelectedSong] = useState(null);
+  const [selectedSongForNewPlaylist, setSelectedSongForNewPlaylist] = useState(null);
   const [showAddToPlaylistModal, setShowAddToPlaylistModal] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showEditPlaylistModal, setShowEditPlaylistModal] = useState(false);
@@ -116,20 +117,43 @@ function App() {
 
   // Handlers for playlist operations
   // Playlist operations
-  const handleCreatePlaylist = async (data) => {
+  const handleCreatePlaylist = async (data, songToAdd = null) => {
     try {
+      // Cria a playlist
       const response = await axios.post(`${API_BASE_URL}/playlists`, data);
-      // Formata a nova playlist antes de adicionar ao estado
-      const newPlaylist = {
-        ...response.data,
-        songs: []
-      };
-      const updatedPlaylists = [...playlists, newPlaylist];
+      const newPlaylistId = response.data.id;
+
+      // Se tem música para adicionar, adiciona
+      if (songToAdd) {
+        await axios.post(`${API_BASE_URL}/playlists/${newPlaylistId}/songs`, { 
+          songIds: [parseInt(songToAdd.id)]
+        });
+      }
+
+      // Busca todas as playlists atualizadas do servidor
+      const updatedPlaylists = await fetchPlaylists();
       setPlaylists(updatedPlaylists);
       setFilteredPlaylists(updatedPlaylists);
       setIsModalOpen(false);
+
+      // Mostra mensagem de sucesso
+      setToast({
+        show: true,
+        message: songToAdd 
+          ? `Playlist criada e música "${songToAdd.title}" adicionada com sucesso!`
+          : 'Playlist criada com sucesso!',
+        variant: 'success'
+      });
+
+      return true; // Indica sucesso
     } catch (error) {
-      handleApiError(error, "Não foi possível criar a playlist. Por favor, tente novamente.");
+      const message = error.response?.data?.message || "Não foi possível criar a playlist. Por favor, tente novamente.";
+      setToast({
+        show: true,
+        message,
+        variant: 'danger'
+      });
+      return false; // Indica falha
     }
   };
 
@@ -368,8 +392,11 @@ function App() {
 
       <CreatePlaylistModal
         show={isModalOpen}
-        onHide={() => setIsModalOpen(false)}
-        onCreatePlaylist={handleCreatePlaylist}
+        onHide={() => {
+          setIsModalOpen(false);
+          setSelectedSongForNewPlaylist(null);
+        }}
+        onCreatePlaylist={(data) => handleCreatePlaylist(data, selectedSongForNewPlaylist)}
       />
 
       <AddToPlaylistModal
@@ -378,6 +405,12 @@ function App() {
         playlists={playlists}
         onSelectPlaylist={handleAddToPlaylist}
         selectedSong={selectedSong}
+        onCreatePlaylist={() => {
+          setShowAddToPlaylistModal(false);
+          setIsModalOpen(true);
+          // Guarda a música selecionada para ser adicionada após criar a playlist
+          setSelectedSongForNewPlaylist(selectedSong);
+        }}
       />
 
       <EditPlaylistModal
