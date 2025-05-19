@@ -61,7 +61,7 @@ function App() {
         ...playlist,
         songs: playlist.playlistSongs
           ? playlist.playlistSongs
-              .sort((a, b) => a.order - b.order)
+              .sort((a, b) => b.order - a.order)
               .map(ps => ps.song)
           : []
       }));
@@ -250,7 +250,7 @@ function App() {
         if (p.id === playlistId) {
           return {
             ...p,
-            songs: p.songs.filter(s => !songIds.includes(s.id))
+            playlistSongs: p.playlistSongs.filter(ps => !songIds.includes(ps.song.id))
           };
         }
         return p;

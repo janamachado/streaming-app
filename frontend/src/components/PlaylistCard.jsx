@@ -6,22 +6,8 @@ import PlaylistDetailsModal from './PlaylistDetailsModal';
 
 const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist }) => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedSongs, setSelectedSongs] = useState([]);
+  const [key, setKey] = useState(0); // Estado para forçar re-render
 
-  const handleSongToggle = (songId) => {
-    setSelectedSongs(prev => {
-      if (prev.includes(songId)) {
-        return prev.filter(id => id !== songId);
-      }
-      return [...prev, songId];
-    });
-  };
-
-  const handleRemoveSelected = () => {
-    onRemoveSong(playlist.id, selectedSongs);
-    setSelectedSongs([]);
-    setShowModal(false);
-  };
 
   const onEditClick = (id) => {
     onEditPlaylist(id);
@@ -41,7 +27,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist
 
   return (
     <>
-      <Card 
+      <Card key={key} 
         className="mb-2 bg-dark text-light border-secondary interactive me-0" 
         onClick={() => setShowModal(true)}
         style={{ width: '240px' }}
@@ -166,14 +152,13 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist
 
       <PlaylistDetailsModal
         show={showModal}
-        onHide={() => {
-          setShowModal(false);
-          setSelectedSongs([]);
-        }}
+        onHide={() => setShowModal(false)}
         playlist={playlist}
-        selectedSongs={selectedSongs}
-        onSongSelect={handleSongToggle}
-        onDeleteSelected={handleRemoveSelected}
+        onRemoveSong={(songIds) => {
+          onRemoveSong(playlist.id, songIds);
+          setShowModal(false);
+          setKey(prev => prev + 1); // Força re-render
+        }}
       />
     </>
   );

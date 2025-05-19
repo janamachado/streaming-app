@@ -19,7 +19,7 @@ const MusicItem = ({ song, onAddToPlaylist }) => {
               className="w-100 h-100 object-fit-cover"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = 'https://placehold.co/40x40/6c757d/e9ecef?text=🎵';
+                e.target.src = 'https://placehold.co/40x40/6c757d/e9ecef?text=%3F';
               }}
             />
           </div>

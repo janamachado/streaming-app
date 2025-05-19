@@ -73,7 +73,7 @@ const AddToPlaylistModal = ({ show, onHide, playlists, onSelectPlaylist, selecte
                       <div className="ms-2">
                         <div>{playlist.name}</div>
                         <small className="text-secondary">
-                          {playlist.songs.length} música{playlist.songs.length !== 1 ? 's' : ''}
+                          {(playlist.playlistSongs || []).length} música{(playlist.playlistSongs || []).length !== 1 ? 's' : ''}
                         </small>
                       </div>
                     }
