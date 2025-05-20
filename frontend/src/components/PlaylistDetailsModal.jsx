@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Modal, Button, ListGroup, Form } from 'react-bootstrap';
 import '../styles/PlaylistDetailsModal.css';
 
@@ -27,6 +27,13 @@ const PlaylistDetailsModal = ({
       return a.order - b.order;
     });
   }, [playlist?.playlistSongs]);
+
+  // Limpa as seleções quando o modal é fechado
+  useEffect(() => {
+    if (!show) {
+      setSelectedSongs([]);
+    }
+  }, [show]);
 
   const handleSongToggle = (songId) => {
     setSelectedSongs(prev => {

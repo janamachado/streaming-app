@@ -6,6 +6,7 @@ import PlaylistDetailsModal from './PlaylistDetailsModal';
 
 const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist, reloadKey }) => {
   const [showModal, setShowModal] = useState(false);
+  const [key, setKey] = useState(0); // Estado para forçar re-render
 
 
   const onEditClick = (id) => {
@@ -26,7 +27,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist
 
   return (
     <>
-      <Card key={reloadKey} 
+      <Card key={`${reloadKey}-${key}`} 
         className="mb-2 bg-dark text-light border-secondary interactive me-0" 
         onClick={() => setShowModal(true)}
         style={{ width: '290px' }}
@@ -156,7 +157,7 @@ const PlaylistCard = ({ playlist, onDeletePlaylist, onRemoveSong, onEditPlaylist
         onRemoveSong={(songIds) => {
           onRemoveSong(playlist.id, songIds);
           setShowModal(false);
-          setKey(prev => prev + 1); // Força re-render
+          setKey(prev => prev + 1); // Força re-render para atualizar a capa
         }}
       />
     </>
