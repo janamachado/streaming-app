@@ -29,11 +29,14 @@ const options = {
             },
             name: {
               type: 'string',
-              description: 'The playlist name'
+              description: 'The playlist name (max 25 characters)',
+              maxLength: 25
             },
             description: {
               type: 'string',
-              description: 'The playlist description'
+              description: 'The playlist description (max 200 characters)',
+              maxLength: 200,
+              nullable: true
             },
             playlistSongs: {
               type: 'array',
@@ -69,7 +72,8 @@ const options = {
             },
             order: {
               type: 'integer',
-              description: 'The order of the song in the playlist'
+              description: 'Position of the song in the playlist (for ordering)',
+              nullable: true
             },
             song: {
               $ref: '#/components/schemas/Song'
@@ -83,19 +87,49 @@ const options = {
               type: 'integer',
               description: 'The song ID'
             },
+            externalId: {
+              type: 'string',
+              description: 'The Deezer song ID'
+            },
             title: {
               type: 'string',
               description: 'The song title'
             },
             artist: {
               type: 'string',
-              description: 'The song artist'
+              description: 'The song artist',
+              nullable: true
+            },
+            album: {
+              type: 'string',
+              description: 'The album name',
+              nullable: true
             },
             duration: {
               type: 'integer',
-              description: 'The song duration in seconds'
+              description: 'The song duration in seconds',
+              nullable: true
+            },
+            url: {
+              type: 'string',
+              description: 'The song URL',
+              nullable: true
+            },
+            cover: {
+              type: 'string',
+              description: 'The album cover URL',
+              nullable: true
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time'
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time'
             }
-          }
+          },
+          required: ['externalId', 'title']
         },
         Error: {
           type: 'object',
