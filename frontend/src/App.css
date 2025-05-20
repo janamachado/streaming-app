@@ -1,0 +1,183 @@
+body {
+  overflow: hidden;
+  height: 100vh;
+  margin: 0;
+  background-color: var(--bs-body-bg);
+}
+
+#root {
+  height: 100vh;
+}
+
+.app-container {
+  height: 100vh;
+  padding: 1rem;
+  background-color: var(--bs-dark);
+}
+
+.main-content {
+  height: calc(100vh - 2rem);
+}
+
+/* Seção de Músicas */
+.songs-section {
+  height: calc(100vh - 2rem);
+  display: flex;
+  flex-direction: column;
+  background: var(--bs-light);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.songs-header {
+  padding: 1rem;
+  background: inherit;
+  border-bottom: 1px solid var(--bs-border-color);
+  border-radius: 0.5rem 0.5rem 0 0;
+  flex-shrink: 0;
+}
+
+.songs-list-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  height: 0; /* Força o container a respeitar o flex */
+}
+
+.songs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 1rem; /* Adiciona espaço extra no final da lista */
+}
+
+/* Seção de Playlists */
+.playlists-section {
+  height: calc(100vh - 2rem);
+  background: var(--bs-light);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.playlists-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.playlists-header {
+  padding: 1rem;
+  background: var(--bs-light);
+  border-bottom: 1px solid var(--bs-border-color);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  flex-shrink: 0;
+}
+
+.playlists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.playlists-grid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.playlists-grid::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.playlists-grid::-webkit-scrollbar-thumb {
+  background: #dee2e6;
+  border-radius: 4px;
+}
+
+.playlists-grid::-webkit-scrollbar-thumb:hover {
+  background: #adb5bd;
+}
+
+/* Estilos do input de busca */
+.form-control::placeholder {
+  color: var(--bs-light) !important;
+  opacity: 0.65;
+}
+
+.form-control:focus::placeholder {
+  opacity: 0.45;
+}
+
+.form-control {
+  color: var(--bs-light) !important;
+}
+
+.form-control:focus {
+  background-color: var(--bg-primary) !important;
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25) !important;
+}
+
+/* Estilos do Modal */
+.modal-fixed-height {
+  max-width: 500px;
+}
+
+.modal-fixed-height .modal-content {
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dark-modal .modal-content {
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius);
+}
+
+.dark-modal .modal-header {
+  border-bottom: 1px solid var(--bg-primary);
+}
+
+.dark-modal .modal-footer {
+  border-top: 1px solid var(--bg-primary);
+  background-color: var(--bg-secondary);
+}
+
+.dark-modal .list-group-item {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--bg-primary);
+  margin-bottom: 0.5rem;
+  border-radius: var(--border-radius);
+  transition: var(--transition-base);
+}
+
+.dark-modal .list-group-item:hover {
+  background-color: var(--bg-primary);
+}
+
+.dark-modal .form-check {
+  width: 100%;
+}
+
+.dark-modal .form-check-input {
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.dark-modal .form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.dark-modal .form-check-label {
+  cursor: pointer;
+  width: 100%;
+  margin-left: 0.5rem;
+}
