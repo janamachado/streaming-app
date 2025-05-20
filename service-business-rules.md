@@ -85,7 +85,7 @@ Este documento descreve as regras de negócio para a criação, edição e geren
 - Recebe um array de `songIds` no corpo da requisição
 - Adiciona uma ou mais músicas à playlist existente
 - Mantém a ordem sequencial das músicas
-- Impede duplicidade de músicas na mesma playlist
+- Músicas duplicadas são automaticamente removidas da requisição
 
 ### ⚠️ Validações
 - Verifica se a playlist existe
@@ -100,7 +100,6 @@ Este documento descreve as regras de negócio para a criação, edição e geren
 ### ✅ Regras de negócio
 - Recebe um array de `songIds` no corpo da requisição
 - Remove uma ou mais músicas da playlist
-- Reordena automaticamente as músicas restantes
 
 ### ⚠️ Validações
 - Verifica se a playlist existe
