@@ -1,5 +1,5 @@
 # 🎵 Streaming Music App
-
+![alt text](frontend/public/cover_app_image.png)
 Este é um projeto full-stack de uma aplicação de streaming de músicas, com foco na gestão de playlists e músicas. O sistema é dividido em duas partes:
 
     Frontend: Desenvolvido com React, Bootstrap e Vite
