@@ -236,11 +236,21 @@ function App() {
       setFilteredPlaylists(updatedPlaylists);
       setSelectedSong(null);
       setPlaylistReloadKey(prev => prev + 1); // Força reload quando adiciona música
+
+      // Mostra mensagem de sucesso
+      setToast({
+        show: true,
+        message: playlistIds.length > 1
+          ? `Música "${selectedSong.title}" adicionada às playlists selecionadas!`
+          : `Música "${selectedSong.title}" adicionada à playlist!`,
+        variant: 'success'
+      });
     } catch (error) {
       handleApiError(error, "Não foi possível adicionar a música a todas as playlists. Por favor, tente novamente.");
     }
   };
 
+// ...
   const handleRemoveSong = async (playlistId, songIds) => {
     try {
       await axios.delete(`${API_BASE_URL}/playlists/${playlistId}/songs`, {
@@ -306,7 +316,7 @@ function App() {
               <div className="pt-2 pe-2" style={{ overflowY: 'auto', flex: 1 }}>
                 {filteredSongs.map((song) => (
                   <MusicItem
-                    key={song.id}
+                    key={song.externalId}
                     song={song}
                     onAddToPlaylist={() => {
                       setSelectedSong(song);
