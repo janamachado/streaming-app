@@ -1,16 +1,44 @@
-# 🎵 Streaming App - Backend
+# 🎵 Streaming Music App
 
-Este é o backend de uma aplicação de streaming de músicas, com foco na gestão de playlists e músicas. Desenvolvido com **Node.js**, **Express**, **Prisma** e banco de dados **PostgreSQL**.
+Este é um projeto full-stack de uma aplicação de streaming de músicas, com foco na gestão de playlists e músicas. O sistema é dividido em duas partes:
 
-## 🛠️ Tecnologias
+    Frontend: Desenvolvido com React, Bootstrap e Vite
+    Backend: Desenvolvido com Node.js, Express, Prisma e PostgreSQL
 
-- Node.js
+A aplicação permite que o usuário:
+
+    🎵 Crie e exclua playlists personalizadas
+    ➕ Adicione músicas às playlists a partir de um serviço externo (Deezer)
+    🗑️ Remova músicas específicas de uma playlist
+    🔍 Pesquise músicas por nome, artista ou gênero
+    📄 Visualize detalhes das músicas e playlists em uma interface amigável
+
+A API é documentada via Swagger, e o sistema conta com testes unitários e de integração tanto no frontend quanto no backend.
+
+---
+
+## 🧭 Índice
+
+- [Backend](#backend)
+- [Documentação da API](#documentacao-da-api)
+- [Banco de Dados e Prisma](#banco-de-dados-e-prisma)
+- [Execução com Docker](#executando-com-docker)
+- [Frontend](#frontend)
+- [Modelos](#modelos)
+- [Testes](#testes)
+
+
+## Backend
+
+### Tecnologias
+
+- Node.js >= 18
 - Express.js
-- PostgreSQL
+- PostgreSQL >= 14
 - Prisma ORM
 - Docker
 
-## 🚀 Executando o Projeto Localmente
+### Executando o Projeto Localmente
 
 1. Clone o repositório:
 ```bash
@@ -40,7 +68,17 @@ npm run dev
 
 > ⚠️ Certifique-se de ter o Node.js e PostgreSQL instalados localmente.
 
-## 🗄️ Banco de Dados e Prisma
+## Documentação da API
+
+A documentação completa e interativa da API está disponível através do Swagger UI em:
+
+```
+http://localhost:3000/api-docs
+```
+
+Após iniciar o servidor, acesse esta URL para consultar todos os endpoints disponíveis, seus parâmetros, respostas, exemplos e testar as requisições diretamente pelo navegador.
+
+## Banco de Dados e Prisma
 
 ### Configuração PostgreSQL
 
@@ -67,105 +105,7 @@ npx prisma db seed
 npx prisma studio
 ```
 
-## ⚙️ Testes
-
-O projeto possui testes unitários e de integração. Para executar os testes:
-
-```bash
-# Executar todos os testes
-npm test
-
-# Executar apenas testes unitários
-npm run test:unit
-
-# Executar apenas testes de integração
-npm run test:integration
-
-# Executar testes com cobertura
-npm run test:coverage
-```
-
-### Configuração do Ambiente de Testes
-
-#### Banco de Dados de Teste
-
-Os testes de integração necessitam de um banco de dados PostgreSQL dedicado para testes. Configure o arquivo `.env.test`:
-
-```env
-DATABASE_URL="postgresql://postgres:senha@localhost:5432/streaming_app_test?schema=public"
-```
-
-> ⚠️ Importante: O banco de dados de teste é limpo automaticamente antes de cada teste.
-
-### Modelos
-
-#### Song
-| Campo     | Tipo     |
-|-----------|----------|
-| id        | Int (PK) |
-| title     | String   |
-| artist    | String   |
-| album     | String   |
-| duration  | Int      |
-| createdAt | DateTime |
-
-#### Playlist
-| Campo       | Tipo     |
-|-------------|----------|
-| id          | Int (PK) |
-| name        | String   |
-| description | String   |
-| songs       | Song[]   |
-| createdAt   | DateTime |
-
----
-
-### 📚 Documentação da API
-
-A documentação interativa está disponível em `http://localhost:3000/api-docs` após iniciar o servidor.
-
-### Endpoints
-
-#### Músicas
-| Método | Rota           | Descrição                     |
-|--------|----------------|-------------------------------|
-| GET    | `/api/song`    | Lista todas as músicas        |
-| GET    | `/api/song/:id`| Retorna uma música específica |
-| POST   | `/api/song`    | Cria uma nova música          |
-| PUT    | `/api/song/:id`| Atualiza uma música           |
-| DELETE | `/api/song/:id`| Remove uma música             |
-
-#### Playlists
-| Método | Rota                     | Descrição                      |
-|--------|--------------------------|--------------------------------|
-| GET    | `/api/playlists`         | Lista todas as playlists       |
-| GET    | `/api/playlists/:id`     | Retorna uma playlist específica|
-| POST   | `/api/playlists`         | Cria uma nova playlist         |
-| PUT    | `/api/playlists/:id`     | Atualiza uma playlist          |
-| DELETE | `/api/playlists/:id`     | Remove uma playlist            |
-
-### 🔍 Filtros de Playlists
-
-- **Por nome**: `/api/playlists?name=rock`
-- **Por música**: `/api/playlists?songId=123`
-- **Busca em nome/descrição**: `/api/playlists/search?query=festa`
-- **Busca por música**: `/api/playlists/by-song?song=shape`
-
-### 🔍 Filtros Disponíveis
-
-#### Playlists
-- **Filtrar por nome**: `/api/playlists?name=rock`
-- **Filtrar por música**: `/api/playlists?songId=123`
-- **Buscar em nome/descrição**: `/api/playlists/search?query=festa`
-- **Buscar por música**: `/api/playlists/by-song?song=shape` (aceita ID ou título)
-
-#### Songs
-- **Filtrar por título**: `/api/song?title=shape`
-- **Filtrar por artista**: `/api/song?artist=ed`
-
----
-
-## 🐳 Executando com Docker
+## Executando com Docker
 
 ### Pré-requisitos
 
@@ -212,3 +152,104 @@ docker-compose exec app npx prisma db seed
 # Parar os containers
 docker-compose down
 ```
+
+## Frontend
+
+### Tecnologias
+
+- React 18
+- Bootstrap 5
+- Vite
+- Vitest (testes)
+- Testing Library
+- Axios
+
+### Executando o Frontend
+
+1. Navegue até a pasta do frontend:
+```bash
+cd frontend
+```
+
+2. Instale as dependências:
+```bash
+npm install
+```
+
+3. Inicie o servidor de desenvolvimento:
+```bash
+npm run dev
+```
+
+> O frontend estará disponível em `http://localhost:5173`
+
+### Funcionalidades
+
+- 🎵 Listagem de músicas do Deezer
+- 📝 Criação, edição e exclusão de playlists
+- ➕ Adição de músicas às playlists
+- 🔍 Busca por músicas e playlists
+- 🗑️ Remoção de músicas das playlists
+
+## Modelos
+
+#### Playlist
+| Campo       | Tipo           |
+|-------------|----------------|
+| id          | Int (PK)       |
+| name        | String (25)     |
+| description | String? (200)   |
+| createdAt   | DateTime       |
+| updatedAt   | DateTime       |
+
+#### Song
+| Campo      | Tipo     |
+|------------|----------|
+| id         | Int (PK) |
+| externalId | String   |
+| title      | String   |
+| artist     | String?  |
+| album      | String?  |
+| duration   | Int?     |
+| url        | String?  |
+| cover      | String?  |
+| createdAt  | DateTime |
+| updatedAt  | DateTime |
+
+#### PlaylistSong
+| Campo      | Tipo     |
+|------------|----------|
+| id         | Int (PK) |
+| playlistId | Int (FK) |
+| songId     | Int (FK) |
+| order      | Int?     |
+
+## Testes
+
+O projeto possui testes unitários e de integração. Para executar os testes:
+
+```bash
+# Executar todos os testes
+npm test
+
+# Executar apenas testes unitários
+npm run test:unit
+
+# Executar apenas testes de integração
+npm run test:integration
+
+# Executar testes com cobertura
+npm run test:coverage
+```
+
+### Configuração do Ambiente de Testes
+
+#### Banco de Dados de Teste
+
+Os testes de integração necessitam de um banco de dados PostgreSQL dedicado para testes. Configure o arquivo `.env.test`:
+
+```env
+DATABASE_URL="postgresql://postgres:senha@localhost:5432/streaming_app_test?schema=public"
+```
+
+> ⚠️ Importante: O banco de dados de teste é limpo automaticamente antes de cada teste.
